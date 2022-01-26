@@ -8,6 +8,10 @@ export default {
   components: {
     ActiveWorkoutAppBar,
   },
+
+  /**
+   * @todo Add the Workout Timer from the older version of the app?
+   */
 }
 </script>
 

@@ -1,5 +1,5 @@
 import { Measurement, Exercise, Workout } from '../models/Entities.js'
-import { EXERCISE_TYPE } from '../constants/globals.js'
+import { EXERCISE_INPUTS } from '../constants/globals.js'
 
 /**
  * Using a few pre-generated ids so new workouts and exercises can be added
@@ -83,8 +83,8 @@ const DEFAULT_IDS = Object.freeze({
   ],
 })
 
-let defaultExercises = {}
-let defaultWorkouts = {}
+let defaultExercises = initDefaultExercises()
+let defaultWorkouts = initDefaultWorkouts()
 
 /**
  * Returns the initial default entities needed by the app.
@@ -92,14 +92,11 @@ let defaultWorkouts = {}
 export function getDefaultEntities() {
   let entities = {}
 
-  defaultExercises = initDefaultExercises()
-  defaultWorkouts = initDefaultWorkouts()
-
   // Add Measurement entity, Exercise entities, and Workout entities
   entities = {
-    [DEFAULT_IDS.measurement[0]]: new Measurement(),
-    ...defaultExercises,
-    ...defaultWorkouts,
+    measurements: { [DEFAULT_IDS.measurement[0]]: new Measurement() },
+    exercises: defaultExercises,
+    workouts: defaultWorkouts,
   }
 
   return entities
@@ -113,23 +110,23 @@ function initDefaultExercises() {
   let newExercises = [
     new Exercise({
       name: 'Barbell Squats',
-      type: EXERCISE_TYPE.weightLifting5Set,
+      inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
       name: 'Barbell Bench Press',
-      type: EXERCISE_TYPE.weightLifting5Set,
+      inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
       name: 'Barbell Rows',
-      type: EXERCISE_TYPE.weightLifting5Set,
+      inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
       name: 'Barbell Overhead Press',
-      type: EXERCISE_TYPE.weightLifting5Set,
+      inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
       name: 'Deadlift',
-      type: EXERCISE_TYPE.weightLifting5Set,
+      inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
   ]
 

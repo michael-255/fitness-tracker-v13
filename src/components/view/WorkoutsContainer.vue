@@ -1,5 +1,6 @@
 <script>
 import WorkoutCard from './WorkoutCard.vue'
+import { ENTITY } from '../../constants/globals.js'
 
 export default {
   components: {
@@ -8,7 +9,7 @@ export default {
 
   computed: {
     workouts() {
-      return this.$store.getters['workouts/getState']
+      return this.$store.getters.getEntityState(ENTITY.workouts)
     },
   },
 }

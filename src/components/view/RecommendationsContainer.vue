@@ -1,22 +1,17 @@
 <script>
-import DefaultsCard from './DefaultsCard.vue'
 import ResumeCard from './ResumeCard.vue'
-import TestCard from './TestCard.vue'
+import ControlPanelCard from './ControlPanelCard.vue'
+import { ENTITY } from '../../constants/globals.js'
 
 export default {
   components: {
-    DefaultsCard,
     ResumeCard,
-    TestCard,
+    ControlPanelCard,
   },
 
   computed: {
-    renderDefaultsCard() {
-      return !this.$store.getters['workouts/isStateReady']
-    },
-
     renderResumeCard() {
-      return this.$store.getters['activeWorkoutRecords/isStateReady']
+      return this.$store.getters.isEntityStateReady(ENTITY.activeWorkoutRecords)
     },
   },
 }
@@ -24,8 +19,7 @@ export default {
 
 <template>
   <v-row>
-    <TestCard />
-    <DefaultsCard v-if="renderDefaultsCard" />
+    <ControlPanelCard />
     <ResumeCard v-if="renderResumeCard" />
   </v-row>
 </template>

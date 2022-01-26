@@ -1,13 +1,13 @@
 export class Measurement {
-  constructor({ name = 'Measurement' } = {}) {
-    this.name = name
+  constructor() {
+    this.name = 'Measurement'
   }
 }
 
 export class Exercise {
-  constructor({ name = 'My Exercise', type = null } = {}) {
+  constructor({ name = 'My Exercise', inputs = {} } = {}) {
     this.name = name
-    this.type = type
+    this.inputs = inputs
   }
 }
 

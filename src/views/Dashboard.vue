@@ -1,7 +1,7 @@
 <script>
-import { VIEW } from '../constants/globals'
 import RecommendationsContainer from '../components/view/RecommendationsContainer.vue'
 import WorkoutsContainer from '../components/view/WorkoutsContainer.vue'
+import { ENTITY, VIEW } from '../constants/globals.js'
 
 export default {
   name: VIEW.dashboard,
@@ -12,18 +12,18 @@ export default {
   },
 
   async created() {
-    const otherWorkout = this.$store.getters[
-      'activeWorkoutRecords/isStateReady'
-    ]
+    const activeWorkoutInState = this.$store.getters.isEntityStateReady(
+      ENTITY.activeWorkoutRecords
+    )
 
-    if (!otherWorkout) {
-      await this.$store.dispatch('existingActiveWorkout')
+    if (!activeWorkoutInState) {
+      await this.$store.dispatch('loadActiveWorkoutFromStorage')
     }
   },
 
   computed: {
     renderWorkouts() {
-      return this.$store.getters['workouts/isStateReady']
+      return this.$store.getters.isEntityStateReady(ENTITY.workouts)
     },
   },
 }
