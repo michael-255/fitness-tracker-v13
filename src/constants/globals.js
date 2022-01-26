@@ -80,7 +80,28 @@ export const ENTITY = Object.freeze({
   activeWorkoutRecords: 'activeWorkoutRecords',
 })
 
-export const INITIAL_MEASUREMENT_IDS = Object.freeze(['1'])
+export const EXERCISE_TYPE = Object.freeze({
+  weightLifting3Set: {
+    setCount: 3,
+    weight: true,
+    reps: true,
+  },
+  weightLifting4Set: {
+    setCount: 4,
+    weight: true,
+    reps: true,
+  },
+  weightLifting5Set: {
+    setCount: 5,
+    weight: true,
+    reps: true,
+  },
+  weightLiftingPyramid: {
+    setCount: 10,
+    weight: true,
+    reps: true,
+  },
+})
 
 const layout = 'Layout'
 
