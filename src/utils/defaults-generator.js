@@ -6,7 +6,7 @@ import { EXERCISE_INPUTS } from '../constants/globals.js'
  * without breaking any record data that users may already have in the app.
  */
 const DEFAULT_IDS = Object.freeze({
-  measurement: ['14e09d78-94d6-40b8-876d-0804e9c457f5'],
+  measurements: ['14e09d78-94d6-40b8-876d-0804e9c457f5'],
   exercises: [
     '4df4eed2-91ad-4134-a700-2240429e55ab',
     'b1d92c34-4c25-48af-8f8f-e3f0976f6798',
@@ -94,7 +94,7 @@ export function getDefaultEntities() {
 
   // Add Measurement entity, Exercise entities, and Workout entities
   entities = {
-    measurements: { [DEFAULT_IDS.measurement[0]]: new Measurement() },
+    measurements: [new Measurement({ id: DEFAULT_IDS.measurements[0] })],
     exercises: defaultExercises,
     workouts: defaultWorkouts,
   }
@@ -107,36 +107,33 @@ export function getDefaultEntities() {
  * Only add new exercises below current ones to ensure ids are not changed.
  */
 function initDefaultExercises() {
-  let newExercises = [
+  return [
     new Exercise({
+      id: DEFAULT_IDS.exercises[0],
       name: 'Barbell Squats',
       inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
+      id: DEFAULT_IDS.exercises[1],
       name: 'Barbell Bench Press',
       inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
+      id: DEFAULT_IDS.exercises[2],
       name: 'Barbell Rows',
       inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
+      id: DEFAULT_IDS.exercises[3],
       name: 'Barbell Overhead Press',
       inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
     new Exercise({
+      id: DEFAULT_IDS.exercises[4],
       name: 'Deadlift',
       inputs: EXERCISE_INPUTS.weightLifting5Set,
     }),
   ]
-
-  let exercisesObject = {}
-
-  for (let i = 0; i < newExercises.length; i++) {
-    exercisesObject[DEFAULT_IDS.exercises[i]] = newExercises[i]
-  }
-
-  return exercisesObject
 }
 
 /**
@@ -144,8 +141,9 @@ function initDefaultExercises() {
  * Only add new workouts below current ones to ensure ids are not changed.
  */
 function initDefaultWorkouts() {
-  let newWorkouts = [
+  return [
     new Workout({
+      id: DEFAULT_IDS.workouts[0],
       name: 'StrongLifts 5x5 - Alpha',
       exerciseIds: [
         getExerciseIdByName('Barbell Squats'),
@@ -154,6 +152,7 @@ function initDefaultWorkouts() {
       ],
     }),
     new Workout({
+      id: DEFAULT_IDS.workouts[1],
       name: 'StrongLifts 5x5 - Beta',
       exerciseIds: [
         getExerciseIdByName('Barbell Squats'),
@@ -162,19 +161,11 @@ function initDefaultWorkouts() {
       ],
     }),
   ]
-
-  let workoutsObject = {}
-
-  for (let i = 0; i < newWorkouts.length; i++) {
-    workoutsObject[DEFAULT_IDS.workouts[i]] = newWorkouts[i]
-  }
-
-  return workoutsObject
 }
 
 /**
  * Find the id of the exercise with the given name.
  */
 function getExerciseIdByName(name) {
-  return Object.entries(defaultExercises).find((val) => val[1].name === name)[0]
+  return defaultExercises.find((exer) => exer.name === name).id
 }

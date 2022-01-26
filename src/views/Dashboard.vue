@@ -11,14 +11,8 @@ export default {
     WorkoutsContainer,
   },
 
-  async created() {
-    const activeWorkoutInState = this.$store.getters.isEntityStateReady(
-      ENTITY.activeWorkoutRecords
-    )
-
-    if (!activeWorkoutInState) {
-      await this.$store.dispatch('loadActiveWorkoutFromStorage')
-    }
+  created() {
+    this.$store.dispatch('setStateWithActiveWorkoutFromStorage')
   },
 
   computed: {

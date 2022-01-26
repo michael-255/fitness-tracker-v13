@@ -30,7 +30,7 @@ export default {
       <v-card-actions>
         <v-container>
           <v-btn color="success mr-3" @click="defaultApp()">
-            Set Defaults
+            Reset Defaults
           </v-btn>
 
           <v-btn color="error mr-3" @click="clearApp()">

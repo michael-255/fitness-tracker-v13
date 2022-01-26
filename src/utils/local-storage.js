@@ -1,16 +1,18 @@
 export const LocalStorage = {
-  init(key, value) {
-    const existingData = getLocalStorage(key)
-    if (!existingData) {
-      this.clear(key, value)
-    }
+  initializeByKeys(keys, value = []) {
+    keys.forEach((key) => {
+      const existingData = getLocalStorage(key)
+      if (!existingData) {
+        this.clearByKeys([key], value)
+      }
+    })
+  },
+
+  clearByKeys(keys, value = []) {
+    keys.forEach((key) => setLocalStorage(key, value))
   },
 
   overwrite(key, value) {
-    setLocalStorage(key, value)
-  },
-
-  clear(key, value) {
     setLocalStorage(key, value)
   },
 

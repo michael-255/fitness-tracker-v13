@@ -11,16 +11,15 @@ export default {
 
   computed: {
     workoutName() {
-      const workoutName = this.workout.name
-      if (workoutName) return workoutName
-      return null
+      return this.workout?.name ?? null
     },
 
-    previousCreatedAtDate() {
-      if (this.workout?.previousRecord?.createdAt) {
-        return new Date(this.workout.previousRecord.createdAt).toDateString()
-      }
-      return null
+    previousWorkoutDate() {
+      return this.$store.getters.getPreviousWorkoutDateById(this.workout.id)
+    },
+
+    previousWorkoutDuration() {
+      return this.$store.getters.getPreviousWorkoutDurationById(this.workout.id)
     },
   },
 
@@ -55,12 +54,16 @@ export default {
     <v-card>
       <v-card-title>{{ workoutName }}</v-card-title>
 
-      <v-card-subtitle>{{ previousCreatedAtDate }}</v-card-subtitle>
+      <v-card-subtitle>
+        {{ previousWorkoutDate }}
+        <br />
+        {{ previousWorkoutDuration }}
+      </v-card-subtitle>
 
       <v-card-actions>
         <v-container>
           <v-btn block color="primary" @click="beginWorkout()">
-            Begin Workout
+            Begin
           </v-btn>
         </v-container>
       </v-card-actions>
