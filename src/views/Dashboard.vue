@@ -1,7 +1,7 @@
 <script>
 import RecommendationsContainer from '../components/view/RecommendationsContainer.vue'
 import WorkoutsContainer from '../components/view/WorkoutsContainer.vue'
-import { ENTITY, VIEW } from '../constants/globals.js'
+import { VIEW } from '../constants/globals.js'
 
 export default {
   name: VIEW.dashboard,
@@ -12,12 +12,13 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('setStateWithActiveWorkoutFromStorage')
+    // Ensure activeWorkout is current if moving between pages
+    // this.$store.dispatch('saturateStateFromStorage', [ENTITY_KEY.activeWorkout])
   },
 
   computed: {
     renderWorkouts() {
-      return this.$store.getters.isEntityStateReady(ENTITY.workouts)
+      return this.$store.getters.isWorkoutStateReady
     },
   },
 }

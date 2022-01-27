@@ -1,44 +1,59 @@
 import { v4 as uuid } from 'uuid'
 
-export class _Entity {
-  constructor({ id = uuid() } = {}) {
+export class Measurement {
+  constructor({ id = uuid(), name = 'My Measurement', records = [] } = {}) {
     this.id = id
+    this.name = name
+    this.records = records
   }
 }
 
-export class Measurement extends _Entity {
-  constructor({ id } = {}) {
-    super({ id })
-    this.name = 'Measurement'
-  }
-}
-
-export class Exercise extends _Entity {
-  constructor({ id, name = 'My Exercise', inputs = {} } = {}) {
-    super({ id })
+export class Exercise {
+  constructor({
+    id = uuid(),
+    name = 'My Exercise',
+    inputs = {},
+    records = [],
+    activeRecords = [],
+  } = {}) {
+    this.id = id
     this.name = name
     this.inputs = inputs
+    this.records = records
+    this.activeRecords = activeRecords
   }
 }
 
-export class Workout extends _Entity {
-  constructor({ id, name = 'My Workout', exerciseIds = [] } = {}) {
-    super({ id })
+export class Workout {
+  constructor({
+    id = uuid(),
+    name = 'My Workout',
+    exerciseIds = [],
+    records = [],
+    activeRecord = {},
+  } = {}) {
+    this.id = id
     this.name = name
     this.exerciseIds = exerciseIds
+    this.records = records
+    this.activeRecord = activeRecord
   }
 }
 
-export class Record extends _Entity {
+export class Record {
   constructor({
-    id,
-    associatedEntityId = null,
-    createdAt = new Date().toISOString(),
+    id = uuid(),
+    startTime = new Date().getTime(),
+    endTime = null,
+    createdDate = new Date().toDateString(),
+    duration = {},
     data = {},
   } = {}) {
-    super({ id })
-    this.associatedEntityId = associatedEntityId
-    this.createdAt = createdAt
+    this.id = id
+    this.startTime = startTime
+    this.endTime = endTime
+    this.createdDate = createdDate
+    this.duration = duration
     this.data = data
   }
 }

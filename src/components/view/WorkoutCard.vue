@@ -1,5 +1,6 @@
 <script>
 import { VIEW } from '../../constants/globals.js'
+// import Timer from '../common/Timer.vue'
 
 export default {
   props: {
@@ -8,24 +9,26 @@ export default {
       required: true,
     },
   },
+  components: {
+    // Timer,
+  },
 
   computed: {
     workoutName() {
-      return this.workout?.name ?? null
+      return this.workout?.name
     },
 
     previousWorkoutDate() {
-      return this.$store.getters.getPreviousWorkoutDateById(this.workout.id)
-    },
-
-    previousWorkoutDuration() {
-      return this.$store.getters.getPreviousWorkoutDurationById(this.workout.id)
+      return (
+        this.$store.getters.getPreviousWorkoutRecord(this.workout?.id)
+          ?.createdDate ?? 'No previous records'
+      )
     },
   },
 
   methods: {
     beginWorkout() {
-      const inProgressWorkout = this.$store.getters['getActiveWorkoutName']
+      const inProgressWorkout = this.$store.getters.isWorkoutStateReady
 
       if (!inProgressWorkout) {
         this.routeToActiveWorkout()
@@ -35,13 +38,11 @@ export default {
         }
       }
     },
-
     async routeToActiveWorkout() {
       const payload = {
         workoutId: this.workout.id,
         exerciseIds: this.workout.exerciseIds,
       }
-
       this.$router.push({ name: VIEW.activeWorkout })
       await this.$store.dispatch('beginNewWorkout', payload)
     },
@@ -57,7 +58,7 @@ export default {
       <v-card-subtitle>
         {{ previousWorkoutDate }}
         <br />
-        {{ previousWorkoutDuration }}
+        @todo: Wed Jan 26 2022
       </v-card-subtitle>
 
       <v-card-actions>

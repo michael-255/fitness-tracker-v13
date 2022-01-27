@@ -3,13 +3,15 @@ import { VIEW } from '../../constants/globals.js'
 
 export default {
   computed: {
-    activeWorkoutName() {
-      return this.$store.getters['getActiveWorkoutName']
-    },
-
-    activeWorkoutRecordCreatedAt() {
-      return this.$store.getters['getActiveWorkoutRecordCreatedAt']
-    },
+    // activeWorkout() {
+    //   return this.$store.getters.getState(ENTITY_KEY.activeWorkout)[0]
+    // },
+    // activeWorkoutName() {
+    //   return this.activeWorkout?.name
+    // },
+    // activeWorkoutRecordCreatedAt() {
+    //   return this.$store.getters['getActiveWorkoutRecordCreatedAt']
+    // },
   },
 
   methods: {
@@ -32,7 +34,7 @@ export default {
       <v-card-title>{{ activeWorkoutName }}</v-card-title>
 
       <v-card-subtitle>
-        {{ new Date(activeWorkoutRecordCreatedAt).toDateString() }}
+        @todo: Wed Jan 26 2022
       </v-card-subtitle>
 
       <v-btn icon absolute top right @click="cancelWorkout()">X</v-btn>

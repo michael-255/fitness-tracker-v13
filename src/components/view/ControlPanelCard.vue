@@ -5,13 +5,13 @@ export default {
       if (
         confirm('Reset the app with the defaults (does NOT remove records)?')
       ) {
-        this.$store.dispatch('defaultApp')
+        this.$store.dispatch('setDefaultAppData')
       }
     },
 
     clearApp() {
       if (confirm('Clear all app data and records?')) {
-        this.$store.dispatch('clearApp')
+        this.$store.dispatch('clearAppData')
       }
     },
 
@@ -25,19 +25,22 @@ export default {
 <template>
   <v-col class="col-12">
     <v-card>
-      <v-card-title>Control Panel</v-card-title>
+      <v-card-title class="pb-0">
+        <v-icon>settings</v-icon>
+        <span class="ml-3">Control Panel</span>
+      </v-card-title>
 
-      <v-card-actions>
-        <v-container>
-          <v-btn color="success mr-3" @click="defaultApp()">
+      <v-card-actions class="pt-0">
+        <v-container class="pt-0">
+          <v-btn small class="success mr-3 mt-3" @click="defaultApp()">
             Reset Defaults
           </v-btn>
 
-          <v-btn color="error mr-3" @click="clearApp()">
+          <v-btn small class="error mr-3 mt-3" @click="clearApp()">
             Clear App
           </v-btn>
 
-          <v-btn color="warning mr-3" @click="exportRecords()">
+          <v-btn small class="warning mr-3 mt-3" @click="exportRecords()">
             Export Records
           </v-btn>
         </v-container>

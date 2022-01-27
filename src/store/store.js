@@ -1,32 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { LocalStorage } from '../utils/local-storage.js'
-import { getDefaultEntities } from '../utils/defaults-generator.js'
-import { ENTITY } from '../constants/globals.js'
+import LocalStorage from '../utils/local-storage.js'
+import createDefaultEntityData from '../utils/defaults-generator.js'
+import { Record } from '../models/Entities.js'
+import { ENTITY_KEY } from '../constants/globals.js'
 
 Vue.use(Vuex)
 
+/**
+ * The entities that make up the app state.
+ * Use the ENTITY_KEY constant when accessing.
+ */
 const defaultState = () => ({
-  [ENTITY.measurements]: [],
-  [ENTITY.exercises]: [],
-  [ENTITY.workouts]: [],
-  [ENTITY.measurementRecords]: [],
-  [ENTITY.exerciseRecords]: [],
-  [ENTITY.workoutRecords]: [],
-  [ENTITY.activeExerciseRecords]: [],
-  [ENTITY.activeWorkoutRecords]: [],
+  [ENTITY_KEY.measurements]: [],
+  [ENTITY_KEY.exercises]: [],
+  [ENTITY_KEY.workouts]: [],
 })
 
 export default new Vuex.Store({
   state: defaultState(),
 
   mutations: {
-    /**
-     * SET_ENTITY commits must include a payload object with the entity and data as properties:
-     * { entity: ENTITY.example, data: {...} }
-     */
-    SET_ENTITY: (state, entityPayload) => {
-      state[entityPayload.entity] = entityPayload.data
+    SET_MEASUREMENTS(state, payload) {
+      state[ENTITY_KEY.measurements] = payload
+    },
+    SET_EXERCISES(state, payload) {
+      state[ENTITY_KEY.exercises] = payload
+    },
+    SET_WORKOUTS(state, payload) {
+      state[ENTITY_KEY.workouts] = payload
     },
     CLEAR_STATE(state) {
       Object.assign(state, defaultState())
@@ -34,98 +36,111 @@ export default new Vuex.Store({
   },
 
   actions: {
-    initApp({ commit }) {
-      const entities = Object.keys(ENTITY)
-
-      LocalStorage.initializeByKeys(entities)
-
-      entities.forEach((entity) => {
-        commit('SET_ENTITY', { entity, data: LocalStorage.get(entity) })
-      })
+    /**
+     * Initializes local storage if needed, then saturates the app state from
+     * it if any data is found there.
+     */
+    startApp({ commit }) {
+      LocalStorage.initializeByKeys(Object.keys(ENTITY_KEY))
+      commit('SET_MEASUREMENTS', LocalStorage.get(ENTITY_KEY.measurements))
+      commit('SET_EXERCISES', LocalStorage.get(ENTITY_KEY.exercises))
+      commit('SET_WORKOUTS', LocalStorage.get(ENTITY_KEY.workouts))
     },
 
-    defaultApp({ commit }) {
-      const entityDefaults = getDefaultEntities()
-
-      const defaultedEntities = [
-        ENTITY.measurements,
-        ENTITY.exercises,
-        ENTITY.workouts,
-      ]
-
-      const remainingEntities = [
-        ENTITY.measurementRecords,
-        ENTITY.exerciseRecords,
-        ENTITY.workoutRecords,
-        ENTITY.activeExerciseRecords,
-        ENTITY.activeWorkoutRecords,
-      ]
-
-      defaultedEntities.forEach((entity) => {
-        LocalStorage.overwrite(entity, entityDefaults[entity])
-        commit('SET_ENTITY', { entity, data: entityDefaults[entity] })
-      })
-
-      LocalStorage.initializeByKeys(remainingEntities)
-    },
-
-    clearApp({ commit }) {
-      LocalStorage.clearByKeys(Object.keys(ENTITY))
+    /**
+     * Resets app to clean state by removing all app data.
+     * This includes the state and local storage.
+     */
+    clearAppData({ commit }) {
+      LocalStorage.clearByKeys(Object.keys(ENTITY_KEY))
       commit('CLEAR_STATE')
     },
 
-    setStateWithActiveWorkoutFromStorage({ commit, getters }) {
-      const activeWorkoutInState = getters.isEntityStateReady(
-        ENTITY.activeWorkoutRecords
-      )
+    /**
+     * Generate the initial default app data for the state and local storage.
+     */
+    setDefaultAppData({ commit }) {
+      const { measurements, exercises, workouts } = createDefaultEntityData()
+      LocalStorage.overwrite(ENTITY_KEY.measurements, measurements)
+      LocalStorage.overwrite(ENTITY_KEY.exercises, exercises)
+      LocalStorage.overwrite(ENTITY_KEY.workouts, workouts)
+      commit('SET_MEASUREMENTS', measurements)
+      commit('SET_EXERCISES', exercises)
+      commit('SET_WORKOUTS', workouts)
+    },
 
-      if (!activeWorkoutInState) {
-        commit('SET_ENTITY', {
-          entity: ENTITY.activeWorkoutRecords,
-          data: LocalStorage.get(ENTITY.activeWorkoutRecords),
-        })
-      }
+    beginNewWorkout({ commit }, payload) {
+      const { workoutId, exerciseIds } = payload
+      const newExerciseRecords = exerciseIds.map(
+        (eid) => new Record({ associatedEntityId: eid })
+      )
+      const newWorkoutRecord = new Record({ associatedEntityId: workoutId })
+      commit('SET_ENTITY_KEY', {
+        entity: ENTITY_KEY.activeExercises,
+        data: newExerciseRecords,
+      })
+      commit('SET_ENTITY_KEY', {
+        entity: ENTITY_KEY.activeWorkout,
+        data: [newWorkoutRecord],
+      })
+      LocalStorage.overwrite(ENTITY_KEY.activeExercises, newExerciseRecords)
+      LocalStorage.overwrite(ENTITY_KEY.activeWorkout, [newWorkoutRecord])
     },
   },
 
   getters: {
-    isEntityStateReady: (state) => (entity) => {
+    isMeasurmentStateReady(state) {
+      const entityState = state[ENTITY_KEY.measurements]
       return (
-        state[entity] !== null &&
-        state[entity] !== undefined &&
-        Array.isArray(state[entity]) &&
-        state[entity].length !== 0
+        entityState !== null &&
+        entityState !== undefined &&
+        Array.isArray(entityState) &&
+        entityState.length !== 0
       )
     },
 
-    getEntityState: (state) => (entity) => {
+    isExerciseStateReady(state) {
+      const entityState = state[ENTITY_KEY.exercises]
+      return (
+        entityState !== null &&
+        entityState !== undefined &&
+        Array.isArray(entityState) &&
+        entityState.length !== 0
+      )
+    },
+
+    isWorkoutStateReady(state) {
+      const entityState = state[ENTITY_KEY.workouts]
+      return (
+        entityState !== null &&
+        entityState !== undefined &&
+        Array.isArray(entityState) &&
+        entityState.length !== 0
+      )
+    },
+
+    getState: (state) => (entity) => {
       return state[entity]
     },
 
-    /**
-     * @todo INCOMPLETE (Sorted data? First record?)
-     */
-    getPreviousWorkoutDateById: (state) => (workoutId) => {
-      const previousWorkoutDate = state[ENTITY.workoutRecords].find(
-        (wr) => wr.id === workoutId
-      )?.createdAt
-
-      if (!previousWorkoutDate) {
-        return 'No previous record'
-      } else {
-        return new Date(previousWorkoutDate)
-      }
+    getPreviousWorkoutRecord: (state) => (workoutId) => {
+      const workoutEntity = state[ENTITY_KEY.workouts].find(
+        (w) => w.id === workoutId
+      )
+      const sortedRecords = workoutEntity.records.sort((a, b) => {
+        b.createdAt - a.createdAt
+      })
+      return sortedRecords[0]
     },
 
-    /**
-     * @todo INCOMPLETE (Sorted data? First record?)
-     */
-    getPreviousWorkoutDurationById: (state) => (workoutId) => {
-      return (
-        state[ENTITY.workoutRecords].find((wr) => {
-          wr.id === workoutId
-        })?.data?.duration ?? '-'
+    getPreviousExerciseRecord: (state) => (exerciseId) => {
+      const exerciseEntity = state[ENTITY_KEY.exercises].find(
+        (e) => e.id === exerciseId
       )
+      const sortedRecords = exerciseEntity.records.sort((a, b) => {
+        b.createdAt - a.createdAt
+      })
+      return sortedRecords[0]
     },
   },
 

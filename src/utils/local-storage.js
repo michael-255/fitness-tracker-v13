@@ -1,4 +1,4 @@
-export const LocalStorage = {
+const LocalStorage = {
   initializeByKeys(keys, value = []) {
     keys.forEach((key) => {
       const existingData = getLocalStorage(key)
@@ -29,3 +29,5 @@ function setLocalStorage(item, data) {
 function getLocalStorage(item) {
   return JSON.parse(localStorage.getItem(item))
 }
+
+export default LocalStorage

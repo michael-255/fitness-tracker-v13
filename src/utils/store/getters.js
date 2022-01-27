@@ -1,4 +1,4 @@
-import { ENTITY } from '../../constants/globals.js'
+import { ENTITY_KEY } from '../../constants/globals.js'
 
 /**
  * Combined Getters - Common consolidated getters for the app
@@ -7,13 +7,14 @@ export const combinedStoreGetters = () => {
   return {
     getActiveExercises(_, getters) {
       const activeWorkoutRecord =
-        getters[`${ENTITY.activeWorkoutRecords}/getState`][0]
+        getters[`${ENTITY_KEY.activeWorkoutRecords}/getState`][0]
 
       let workoutId
       if (activeWorkoutRecord) workoutId = activeWorkoutRecord.workoutId
 
       let workout
-      if (workoutId) workout = getters[`${ENTITY.workouts}/findById`](workoutId)
+      if (workoutId)
+        workout = getters[`${ENTITY_KEY.workouts}/findById`](workoutId)
 
       let exerciseIds
       if (workout) exerciseIds = workout.exerciseIds
@@ -26,7 +27,7 @@ export const combinedStoreGetters = () => {
     },
 
     getActiveExerciseById: (_, getters) => (id) => {
-      const exercise = getters[`${ENTITY.exercises}/findById`](id)
+      const exercise = getters[`${ENTITY_KEY.exercises}/findById`](id)
 
       if (exercise) return exercise
       return null
@@ -34,7 +35,7 @@ export const combinedStoreGetters = () => {
 
     getActiveExerciseRecords(_, getters) {
       const activeExerciseRecords =
-        getters[`${ENTITY.activeExerciseRecords}/getState`]
+        getters[`${ENTITY_KEY.activeExerciseRecords}/getState`]
 
       if (activeExerciseRecords) return activeExerciseRecords
       return null
@@ -42,13 +43,14 @@ export const combinedStoreGetters = () => {
 
     getActiveWorkoutName(_, getters) {
       const activeWorkoutRecord =
-        getters[`${ENTITY.activeWorkoutRecords}/getState`][0]
+        getters[`${ENTITY_KEY.activeWorkoutRecords}/getState`][0]
 
       let workoutId
       if (activeWorkoutRecord) workoutId = activeWorkoutRecord.workoutId
 
       let workout
-      if (workoutId) workout = getters[`${ENTITY.workouts}/findById`](workoutId)
+      if (workoutId)
+        workout = getters[`${ENTITY_KEY.workouts}/findById`](workoutId)
 
       let workoutName
       if (workout) workoutName = workout.name
@@ -59,7 +61,7 @@ export const combinedStoreGetters = () => {
 
     getActiveWorkoutRecordCreatedAt(_, getters) {
       const activeWorkoutRecord =
-        getters[`${ENTITY.activeWorkoutRecords}/getState`][0]
+        getters[`${ENTITY_KEY.activeWorkoutRecords}/getState`][0]
 
       let createdAt
       if (activeWorkoutRecord) createdAt = activeWorkoutRecord.createdAt
@@ -69,7 +71,7 @@ export const combinedStoreGetters = () => {
     },
 
     getExerciseById: (_, getters) => (exerciseId) => {
-      const exercises = getters[`${ENTITY.exercises}/getState`]
+      const exercises = getters[`${ENTITY_KEY.exercises}/getState`]
 
       const index = exercises.findIndex((i) => i.id === exerciseId)
 

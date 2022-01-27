@@ -1,17 +1,15 @@
 <script>
 import { LAYOUT } from '../constants/globals.js'
 import ActiveWorkoutAppBar from '../components/layout/ActiveWorkoutAppBar.vue'
+import WorkoutTimerFooter from '../components/layout/ActiveWorkoutFooter.vue'
 
 export default {
   name: LAYOUT.activeWorkout,
 
   components: {
     ActiveWorkoutAppBar,
+    WorkoutTimerFooter,
   },
-
-  /**
-   * @todo Add the Workout Timer from the older version of the app?
-   */
 }
 </script>
 
@@ -21,5 +19,6 @@ export default {
     <v-main>
       <slot />
     </v-main>
+    <WorkoutTimerFooter />
   </div>
 </template>

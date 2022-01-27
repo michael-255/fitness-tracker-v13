@@ -6,15 +6,16 @@ export const ICON = Object.freeze({
   distance: 'place',
 })
 
-export const ENTITY = Object.freeze({
+export const MILLISECONDS = Object.freeze({
+  perHour: 3600000,
+  perMinute: 60000,
+  perSecond: 1000,
+})
+
+export const ENTITY_KEY = Object.freeze({
   measurements: 'measurements',
   exercises: 'exercises',
   workouts: 'workouts',
-  measurementRecords: 'measurementRecords',
-  exerciseRecords: 'exerciseRecords',
-  workoutRecords: 'workoutRecords',
-  activeExerciseRecords: 'activeExerciseRecords',
-  activeWorkoutRecords: 'activeWorkoutRecords',
 })
 
 export const EXERCISE_INPUTS = Object.freeze({
@@ -33,7 +34,7 @@ export const EXERCISE_INPUTS = Object.freeze({
     weight: true,
     reps: true,
   },
-  weightLiftingPyramid: {
+  weightLifting10Set: {
     setCount: 10,
     weight: true,
     reps: true,

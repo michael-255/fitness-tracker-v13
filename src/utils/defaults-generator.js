@@ -6,7 +6,23 @@ import { EXERCISE_INPUTS } from '../constants/globals.js'
  * without breaking any record data that users may already have in the app.
  */
 const DEFAULT_IDS = Object.freeze({
-  measurements: ['14e09d78-94d6-40b8-876d-0804e9c457f5'],
+  measurements: [
+    '14e09d78-94d6-40b8-876d-0804e9c457f5',
+    'd2e44ba5-4ba6-49fd-a411-da0abbef2483',
+    '32f526b5-856f-42fa-9772-2650302e197d',
+    'c61e5e53-b03d-4342-abf8-b94006b315ec',
+    '47baa309-f303-469d-8440-2ee7c5f3b14b',
+    'ae3d5dda-ace9-41c2-8cd6-22a4390a1cc0',
+    'a45100d3-c36c-4830-80af-6c0ad01b4bf1',
+    'b61dfc60-ce56-4cc1-812f-3baa684b5f1d',
+    '399a7969-0e59-4f2b-94d5-2aedc58e5c19',
+    '95bbc756-04b3-4091-a404-d01f3c81daea',
+    'f25a52c8-1a77-4933-b38b-56ba39cee933',
+    '18470793-081a-4771-9e8e-6f7d6035aa24',
+    'cfd5e054-8234-4149-89c2-533083148fde',
+    '6fd59aae-cf63-4ae0-98b9-faf28638a2a6',
+    '7cff9c4b-2dcf-42be-a083-86c18120dc24',
+  ],
   exercises: [
     '4df4eed2-91ad-4134-a700-2240429e55ab',
     'b1d92c34-4c25-48af-8f8f-e3f0976f6798',
@@ -48,16 +64,6 @@ const DEFAULT_IDS = Object.freeze({
     '7a4352a1-3db2-43b2-8358-6813fa438c64',
     '9f701487-4e4d-4382-99ac-a143ba22b509',
     '0e2fe56f-973f-43ac-8007-d12d0554d631',
-    'd2e44ba5-4ba6-49fd-a411-da0abbef2483',
-    '32f526b5-856f-42fa-9772-2650302e197d',
-    'c61e5e53-b03d-4342-abf8-b94006b315ec',
-    '47baa309-f303-469d-8440-2ee7c5f3b14b',
-    'ae3d5dda-ace9-41c2-8cd6-22a4390a1cc0',
-    'a45100d3-c36c-4830-80af-6c0ad01b4bf1',
-    'b61dfc60-ce56-4cc1-812f-3baa684b5f1d',
-    '399a7969-0e59-4f2b-94d5-2aedc58e5c19',
-    '95bbc756-04b3-4091-a404-d01f3c81daea',
-    'f25a52c8-1a77-4933-b38b-56ba39cee933',
   ],
   workouts: [
     '8d4e4291-b87b-4756-b4ed-7cdd153f413a',
@@ -76,35 +82,92 @@ const DEFAULT_IDS = Object.freeze({
     'ab19f9db-de13-4660-87ff-da2b31a61003',
     'c54238ff-bd1b-4f7a-96f3-b9a54d00a9da',
     '206e2459-8538-4509-84cb-c837723a1439',
-    '18470793-081a-4771-9e8e-6f7d6035aa24',
-    'cfd5e054-8234-4149-89c2-533083148fde',
-    '6fd59aae-cf63-4ae0-98b9-faf28638a2a6',
-    '7cff9c4b-2dcf-42be-a083-86c18120dc24',
   ],
 })
-
-let defaultExercises = initDefaultExercises()
-let defaultWorkouts = initDefaultWorkouts()
 
 /**
  * Returns the initial default entities needed by the app.
  */
-export function getDefaultEntities() {
-  let entities = {}
+export default function createDefaultEntityData() {
+  const defaultMeasurements = initDefaultMeasurements()
+  const defaultExercises = initDefaultExercises()
+  const defaultWorkouts = initDefaultWorkouts(defaultExercises)
 
-  // Add Measurement entity, Exercise entities, and Workout entities
-  entities = {
-    measurements: [new Measurement({ id: DEFAULT_IDS.measurements[0] })],
+  return {
+    measurements: defaultMeasurements,
     exercises: defaultExercises,
     workouts: defaultWorkouts,
   }
-
-  return entities
 }
 
 /**
- * Create initial default exercises with constant ids.
- * Only add new exercises below current ones to ensure ids are not changed.
+ * Returns initial default measurement options with constant ids.
+ * Only add new options below current ones to ensure ids are not changed.
+ */
+function initDefaultMeasurements() {
+  return [
+    new Measurement({
+      id: DEFAULT_IDS.measurements[0],
+      name: 'Body Weight',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[1],
+      name: 'Body Fat',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[2],
+      name: 'Neck',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[3],
+      name: 'Shoulders',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[4],
+      name: 'Chest',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[5],
+      name: 'Left Biceps',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[6],
+      name: 'Right Biceps',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[7],
+      name: 'Left Forearms',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[8],
+      name: 'Right Forearms',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[9],
+      name: 'Waist',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[10],
+      name: 'Left Thighs',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[11],
+      name: 'Right Thighs',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[12],
+      name: 'Left Calves',
+    }),
+    new Measurement({
+      id: DEFAULT_IDS.measurements[13],
+      name: 'Right Calves',
+    }),
+  ]
+}
+
+/**
+ * Returns initial default exercise options with constant ids.
+ * Only add new options below current ones to ensure ids are not changed.
  */
 function initDefaultExercises() {
   return [
@@ -137,10 +200,14 @@ function initDefaultExercises() {
 }
 
 /**
- * Create initial default workouts with constant ids (requires default exercises).
- * Only add new workouts below current ones to ensure ids are not changed.
+ * Returns initial default workouts with constant ids (requires default exercises).
+ * Only add new options below current ones to ensure ids are not changed.
  */
-function initDefaultWorkouts() {
+function initDefaultWorkouts(defaultExercises) {
+  const getExerciseIdByName = (name) => {
+    return defaultExercises.find((exer) => exer.name === name).id
+  }
+
   return [
     new Workout({
       id: DEFAULT_IDS.workouts[0],
@@ -161,11 +228,4 @@ function initDefaultWorkouts() {
       ],
     }),
   ]
-}
-
-/**
- * Find the id of the exercise with the given name.
- */
-function getExerciseIdByName(name) {
-  return defaultExercises.find((exer) => exer.name === name).id
 }

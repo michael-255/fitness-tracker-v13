@@ -11,7 +11,7 @@ export default {
 
   computed: {
     activeExerciseRecords() {
-      return this.$store.getters['getActiveExerciseRecords']
+      return this.$store.getters['getActiveExercises']
     },
   },
 
