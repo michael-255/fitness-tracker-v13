@@ -12,10 +12,15 @@ export const MILLISECONDS = Object.freeze({
   perSecond: 1000,
 })
 
-export const ENTITY_KEY = Object.freeze({
+export const ENTITY = Object.freeze({
   measurements: 'measurements',
   exercises: 'exercises',
   workouts: 'workouts',
+  measurementRecords: 'measurementRecords',
+  exerciseRecords: 'exerciseRecords',
+  workoutRecords: 'workoutRecords',
+  activeExercises: 'activeExercises',
+  activeWorkout: 'activeWorkout',
 })
 
 export const EXERCISE_INPUTS = Object.freeze({

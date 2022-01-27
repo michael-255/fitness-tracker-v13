@@ -4,7 +4,7 @@ import { VIEW } from '../../constants/globals.js'
 export default {
   computed: {
     // activeWorkout() {
-    //   return this.$store.getters.getState(ENTITY_KEY.activeWorkout)[0]
+    //   return this.$store.getters.getState(ENTITY.activeWorkout)[0]
     // },
     // activeWorkoutName() {
     //   return this.activeWorkout?.name

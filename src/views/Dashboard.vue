@@ -13,7 +13,7 @@ export default {
 
   created() {
     // Ensure activeWorkout is current if moving between pages
-    // this.$store.dispatch('saturateStateFromStorage', [ENTITY_KEY.activeWorkout])
+    // this.$store.dispatch('saturateStateFromStorage', [ENTITY.activeWorkout])
   },
 
   computed: {

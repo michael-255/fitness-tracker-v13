@@ -1,6 +1,6 @@
 import ExerciseRecord from '../../models/ExerciseRecord.js'
 import WorkoutRecord from '../../models/WorkoutRecord.js'
-import { ENTITY_KEY } from '../../constants/globals.js'
+import { ENTITY } from '../../constants/globals.js'
 import { LocalStorage } from './database.js'
 import { createDefaultExercises, createDefaultWorkouts } from './defaults.js'
 
@@ -11,78 +11,78 @@ export const combinedStoreActions = () => {
   return {
     async initApp({ dispatch }) {
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/initDatabase`),
-        dispatch(`${ENTITY_KEY.workouts}/initDatabase`),
-        dispatch(`${ENTITY_KEY.exerciseRecords}/initDatabase`),
-        dispatch(`${ENTITY_KEY.workoutRecords}/initDatabase`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/initDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/initDatabase`),
+        dispatch(`${ENTITY.exercises}/initDatabase`),
+        dispatch(`${ENTITY.workouts}/initDatabase`),
+        dispatch(`${ENTITY.exerciseRecords}/initDatabase`),
+        dispatch(`${ENTITY.workoutRecords}/initDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/initDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/initDatabase`),
       ])
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.workouts}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.exerciseRecords}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.workoutRecords}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.exercises}/setStateWithDatabase`),
+        dispatch(`${ENTITY.workouts}/setStateWithDatabase`),
+        dispatch(`${ENTITY.exerciseRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.workoutRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/setStateWithDatabase`),
       ])
     },
     async clearApp({ dispatch }) {
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.workouts}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.exerciseRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.workoutRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.exercises}/clearState`),
-        dispatch(`${ENTITY_KEY.workouts}/clearState`),
-        dispatch(`${ENTITY_KEY.exerciseRecords}/clearState`),
-        dispatch(`${ENTITY_KEY.workoutRecords}/clearState`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearState`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearState`),
+        dispatch(`${ENTITY.exercises}/clearDatabase`),
+        dispatch(`${ENTITY.workouts}/clearDatabase`),
+        dispatch(`${ENTITY.exerciseRecords}/clearDatabase`),
+        dispatch(`${ENTITY.workoutRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearDatabase`),
+        dispatch(`${ENTITY.exercises}/clearState`),
+        dispatch(`${ENTITY.workouts}/clearState`),
+        dispatch(`${ENTITY.exerciseRecords}/clearState`),
+        dispatch(`${ENTITY.workoutRecords}/clearState`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearState`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearState`),
       ])
     },
     async useDefaults({ dispatch }) {
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/setStateWithDefaults`),
-        dispatch(`${ENTITY_KEY.workouts}/setStateWithDefaults`),
+        dispatch(`${ENTITY.exercises}/setStateWithDefaults`),
+        dispatch(`${ENTITY.workouts}/setStateWithDefaults`),
       ])
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/saveStateToDatabase`),
-        dispatch(`${ENTITY_KEY.workouts}/saveStateToDatabase`),
+        dispatch(`${ENTITY.exercises}/saveStateToDatabase`),
+        dispatch(`${ENTITY.workouts}/saveStateToDatabase`),
       ])
     },
 
     async beginNewWorkout({ dispatch }, payload) {
       await Promise.all([
         dispatch(
-          `${ENTITY_KEY.activeExerciseRecords}/createActiveRecordsForState`,
+          `${ENTITY.activeExerciseRecords}/createActiveRecordsForState`,
           payload.exerciseIds
         ),
         dispatch(
-          `${ENTITY_KEY.activeWorkoutRecords}/createActiveRecordsForState`,
+          `${ENTITY.activeWorkoutRecords}/createActiveRecordsForState`,
           payload.workoutId
         ),
       ])
       await Promise.all([
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/saveStateToDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/saveStateToDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/saveStateToDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/saveStateToDatabase`),
       ])
     },
 
     async existingActiveWorkout({ dispatch }) {
       await Promise.all([
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/setStateWithDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/setStateWithDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/setStateWithDatabase`),
       ])
     },
     async cancelWorkout({ dispatch }) {
       await Promise.all([
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearState`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearState`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearState`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearState`),
       ])
     },
     async finishWorkout({ dispatch, getters }) {
@@ -96,7 +96,7 @@ export const combinedStoreActions = () => {
           recordData: record,
         }
         await dispatch(
-          `${ENTITY_KEY.exercises}/updatePreviousRecordForState`,
+          `${ENTITY.exercises}/updatePreviousRecordForState`,
           payload
         )
       }
@@ -107,37 +107,37 @@ export const combinedStoreActions = () => {
           recordData: record,
         }
         await dispatch(
-          `${ENTITY_KEY.workouts}/updatePreviousRecordForState`,
+          `${ENTITY.workouts}/updatePreviousRecordForState`,
           payload
         )
       }
 
       await Promise.all([
         dispatch(
-          `${ENTITY_KEY.exerciseRecords}/insertPayloadToState`,
+          `${ENTITY.exerciseRecords}/insertPayloadToState`,
           activeExerciseRecords
         ),
         dispatch(
-          `${ENTITY_KEY.workoutRecords}/insertPayloadToState`,
+          `${ENTITY.workoutRecords}/insertPayloadToState`,
           activeWorkoutRecords
         ),
       ])
       await Promise.all([
-        dispatch(`${ENTITY_KEY.exercises}/saveStateToDatabase`),
-        dispatch(`${ENTITY_KEY.workouts}/saveStateToDatabase`),
-        dispatch(`${ENTITY_KEY.exerciseRecords}/saveStateToDatabase`),
-        dispatch(`${ENTITY_KEY.workoutRecords}/saveStateToDatabase`),
+        dispatch(`${ENTITY.exercises}/saveStateToDatabase`),
+        dispatch(`${ENTITY.workouts}/saveStateToDatabase`),
+        dispatch(`${ENTITY.exerciseRecords}/saveStateToDatabase`),
+        dispatch(`${ENTITY.workoutRecords}/saveStateToDatabase`),
       ])
       await Promise.all([
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearDatabase`),
-        dispatch(`${ENTITY_KEY.activeExerciseRecords}/clearState`),
-        dispatch(`${ENTITY_KEY.activeWorkoutRecords}/clearState`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearDatabase`),
+        dispatch(`${ENTITY.activeExerciseRecords}/clearState`),
+        dispatch(`${ENTITY.activeWorkoutRecords}/clearState`),
       ])
     },
     async updateActiveExerciseSet({ dispatch }, payload) {
       await dispatch('activeExerciseRecords/putPayloadToState', payload)
-      await dispatch(`${ENTITY_KEY.activeExerciseRecords}/saveStateToDatabase`)
+      await dispatch(`${ENTITY.activeExerciseRecords}/saveStateToDatabase`)
     },
   }
 }
@@ -199,9 +199,9 @@ export const entityActions = (entity) => {
 
 function createDefaultsForEntity(entity) {
   switch (entity) {
-    case ENTITY_KEY.exercises:
+    case ENTITY.exercises:
       return createDefaultExercises()
-    case ENTITY_KEY.workouts:
+    case ENTITY.workouts:
       return createDefaultWorkouts()
     default:
       return null
@@ -243,11 +243,11 @@ function createEntityRecords(entity, ids) {
   if (!Array.isArray(ids)) ids = [ids] // Must be an array, even if only 1 element
 
   switch (entity) {
-    case ENTITY_KEY.activeExerciseRecords:
-    case ENTITY_KEY.exerciseRecords:
+    case ENTITY.activeExerciseRecords:
+    case ENTITY.exerciseRecords:
       return ids.map((id) => new ExerciseRecord({ exerciseId: id }))
-    case ENTITY_KEY.activeWorkoutRecords:
-    case ENTITY_KEY.workoutRecords:
+    case ENTITY.activeWorkoutRecords:
+    case ENTITY.workoutRecords:
       return ids.map((id) => new WorkoutRecord({ workoutId: id }))
     default:
       return null

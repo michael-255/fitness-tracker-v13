@@ -1,5 +1,5 @@
 <script>
-import { VIEW } from '../../constants/globals.js'
+import { ENTITY, VIEW } from '../../constants/globals.js'
 // import Timer from '../common/Timer.vue'
 
 export default {
@@ -28,9 +28,9 @@ export default {
 
   methods: {
     beginWorkout() {
-      const inProgressWorkout = this.$store.getters.isWorkoutStateReady
+      const currentWorkout = this.$store.getters.isStateReady(ENTITY.workouts)
 
-      if (!inProgressWorkout) {
+      if (!currentWorkout) {
         this.routeToActiveWorkout()
       } else {
         if (confirm('Replace in progress workout?')) {
@@ -39,12 +39,8 @@ export default {
       }
     },
     async routeToActiveWorkout() {
-      const payload = {
-        workoutId: this.workout.id,
-        exerciseIds: this.workout.exerciseIds,
-      }
       this.$router.push({ name: VIEW.activeWorkout })
-      await this.$store.dispatch('beginNewWorkout', payload)
+      await this.$store.dispatch('beginNewWorkout', this.workout)
     },
   },
 }

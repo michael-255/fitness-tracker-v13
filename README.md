@@ -14,9 +14,9 @@ Fitness Tracker Web App v13
 ```javascript
 // FILE -----------------------------------------------------------------------
 const defaultState = () => ({
-  [ENTITY_KEY.measurements]: [],
-  [ENTITY_KEY.exercises]: [],
-  [ENTITY_KEY.workouts]: [],
+  [ENTITY.measurements]: [],
+  [ENTITY.exercises]: [],
+  [ENTITY.workouts]: [],
 })
 
 // FILE -----------------------------------------------------------------------

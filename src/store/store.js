@@ -3,48 +3,51 @@ import Vuex from 'vuex'
 import LocalStorage from '../utils/local-storage.js'
 import createDefaultEntityData from '../utils/defaults-generator.js'
 import { Record } from '../models/Entities.js'
-import { ENTITY_KEY } from '../constants/globals.js'
+import { ENTITY } from '../constants/globals.js'
 
 Vue.use(Vuex)
 
 /**
  * The entities that make up the app state.
- * Use the ENTITY_KEY constant when accessing.
+ * Use the ENTITY constant when accessing.
  */
 const defaultState = () => ({
-  [ENTITY_KEY.measurements]: [],
-  [ENTITY_KEY.exercises]: [],
-  [ENTITY_KEY.workouts]: [],
+  [ENTITY.measurements]: [],
+  [ENTITY.exercises]: [],
+  [ENTITY.workouts]: [],
+  [ENTITY.measurementRecords]: [],
+  [ENTITY.exerciseRecords]: [],
+  [ENTITY.workoutRecords]: [],
+  [ENTITY.activeExercises]: [],
+  [ENTITY.activeWorkout]: [],
 })
 
 export default new Vuex.Store({
   state: defaultState(),
 
   mutations: {
-    SET_MEASUREMENTS(state, payload) {
-      state[ENTITY_KEY.measurements] = payload
-    },
-    SET_EXERCISES(state, payload) {
-      state[ENTITY_KEY.exercises] = payload
-    },
-    SET_WORKOUTS(state, payload) {
-      state[ENTITY_KEY.workouts] = payload
+    SET_ENTITY(state, payload) {
+      const { entity, data } = payload
+      state[entity] = data
     },
     CLEAR_STATE(state) {
       Object.assign(state, defaultState())
     },
   },
 
+  // ACTIONS ------------------------------------------------------------------
   actions: {
     /**
      * Initializes local storage if needed, then saturates the app state from
      * it if any data is found there.
      */
     startApp({ commit }) {
-      LocalStorage.initializeByKeys(Object.keys(ENTITY_KEY))
-      commit('SET_MEASUREMENTS', LocalStorage.get(ENTITY_KEY.measurements))
-      commit('SET_EXERCISES', LocalStorage.get(ENTITY_KEY.exercises))
-      commit('SET_WORKOUTS', LocalStorage.get(ENTITY_KEY.workouts))
+      const entityKeys = Object.keys(ENTITY)
+      LocalStorage.initializeByKeys(entityKeys)
+      entityKeys.forEach((entity) => {
+        const data = LocalStorage.get(entity)
+        commit('SET_ENTITY', { entity, data })
+      })
     },
 
     /**
@@ -52,7 +55,7 @@ export default new Vuex.Store({
      * This includes the state and local storage.
      */
     clearAppData({ commit }) {
-      LocalStorage.clearByKeys(Object.keys(ENTITY_KEY))
+      LocalStorage.clearByKeys(Object.keys(ENTITY))
       commit('CLEAR_STATE')
     },
 
@@ -60,57 +63,40 @@ export default new Vuex.Store({
      * Generate the initial default app data for the state and local storage.
      */
     setDefaultAppData({ commit }) {
-      const { measurements, exercises, workouts } = createDefaultEntityData()
-      LocalStorage.overwrite(ENTITY_KEY.measurements, measurements)
-      LocalStorage.overwrite(ENTITY_KEY.exercises, exercises)
-      LocalStorage.overwrite(ENTITY_KEY.workouts, workouts)
-      commit('SET_MEASUREMENTS', measurements)
-      commit('SET_EXERCISES', exercises)
-      commit('SET_WORKOUTS', workouts)
+      const entityDefaults = createDefaultEntityData()
+      const entityKeys = Object.keys(entityDefaults)
+      entityKeys.forEach((entity) => {
+        const data = entityDefaults[entity]
+        LocalStorage.overwrite(entity, data)
+        commit('SET_ENTITY', { entity, data })
+      })
     },
 
-    beginNewWorkout({ commit }, payload) {
-      const { workoutId, exerciseIds } = payload
+    beginNewWorkout({ commit }, workout) {
+      const { id, exerciseIds } = workout
       const newExerciseRecords = exerciseIds.map(
-        (eid) => new Record({ associatedEntityId: eid })
+        (eid) => new Record({ entityId: eid })
       )
-      const newWorkoutRecord = new Record({ associatedEntityId: workoutId })
-      commit('SET_ENTITY_KEY', {
-        entity: ENTITY_KEY.activeExercises,
+      const newWorkoutRecord = new Record({ entityId: id })
+
+      commit('SET_ENTITY', {
+        entity: ENTITY.activeExercises,
         data: newExerciseRecords,
       })
-      commit('SET_ENTITY_KEY', {
-        entity: ENTITY_KEY.activeWorkout,
+      commit('SET_ENTITY', {
+        entity: ENTITY.activeWorkout,
         data: [newWorkoutRecord],
       })
-      LocalStorage.overwrite(ENTITY_KEY.activeExercises, newExerciseRecords)
-      LocalStorage.overwrite(ENTITY_KEY.activeWorkout, [newWorkoutRecord])
+      LocalStorage.overwrite(ENTITY.activeExercises, newExerciseRecords)
+      LocalStorage.overwrite(ENTITY.activeWorkout, [newWorkoutRecord])
     },
   },
 
+  // GETTERS ------------------------------------------------------------------
   getters: {
-    isMeasurmentStateReady(state) {
-      const entityState = state[ENTITY_KEY.measurements]
-      return (
-        entityState !== null &&
-        entityState !== undefined &&
-        Array.isArray(entityState) &&
-        entityState.length !== 0
-      )
-    },
+    isStateReady: (state) => (entity) => {
+      const entityState = state[entity]
 
-    isExerciseStateReady(state) {
-      const entityState = state[ENTITY_KEY.exercises]
-      return (
-        entityState !== null &&
-        entityState !== undefined &&
-        Array.isArray(entityState) &&
-        entityState.length !== 0
-      )
-    },
-
-    isWorkoutStateReady(state) {
-      const entityState = state[ENTITY_KEY.workouts]
       return (
         entityState !== null &&
         entityState !== undefined &&
@@ -123,25 +109,32 @@ export default new Vuex.Store({
       return state[entity]
     },
 
-    getPreviousWorkoutRecord: (state) => (workoutId) => {
-      const workoutEntity = state[ENTITY_KEY.workouts].find(
-        (w) => w.id === workoutId
-      )
-      const sortedRecords = workoutEntity.records.sort((a, b) => {
-        b.createdAt - a.createdAt
-      })
-      return sortedRecords[0]
+    getPreviousExerciseRecord: (state) => (exerciseId) => {
+      console.log(state, exerciseId)
     },
 
-    getPreviousExerciseRecord: (state) => (exerciseId) => {
-      const exerciseEntity = state[ENTITY_KEY.exercises].find(
-        (e) => e.id === exerciseId
-      )
-      const sortedRecords = exerciseEntity.records.sort((a, b) => {
-        b.createdAt - a.createdAt
-      })
-      return sortedRecords[0]
+    getPreviousWorkoutRecord: (state) => (workoutId) => {
+      console.log(state, workoutId)
     },
+
+    getPreviousWorkoutRecordCreatedDate: (state) => (workoutId) => {
+      console.log(state, workoutId)
+    },
+
+    getPreviousWorkoutRecordDuration: (state) => (workoutId) => {
+      console.log(state, workoutId)
+    },
+
+    // How to get the latest record...
+    // getPreviousWorkoutRecord: (state) => (workoutId) => {
+    //   const workoutEntity = state[ENTITY.workouts].find(
+    //     (w) => w.id === workoutId
+    //   )
+    //   const sortedRecords = workoutEntity.records.sort((a, b) => {
+    //     b.createdAt - a.createdAt
+    //   })
+    //   return sortedRecords[0]
+    // },
   },
 
   modules: {},
