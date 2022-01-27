@@ -1,3 +1,5 @@
+import { APP_ID } from '../constants/globals.js'
+
 const LocalStorage = {
   initializeByKeys(keys, value = []) {
     keys.forEach((key) => {
@@ -23,11 +25,15 @@ const LocalStorage = {
 
 function setLocalStorage(item, data) {
   const json = JSON.stringify(data)
-  localStorage.setItem(item, json)
+  localStorage.setItem(transformItem(item), json)
 }
 
 function getLocalStorage(item) {
-  return JSON.parse(localStorage.getItem(item))
+  return JSON.parse(localStorage.getItem(transformItem(item)))
+}
+
+function transformItem(item) {
+  return `${APP_ID}-${item}`
 }
 
 export default LocalStorage

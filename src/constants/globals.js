@@ -1,3 +1,8 @@
+/**
+ * Use this as a prefix for LocalStorage fields to make them unique.
+ */
+export const APP_ID = Object.freeze('FTv13')
+
 export const ICON = Object.freeze({
   sets: 'list',
   weight: 'fitness_center',
