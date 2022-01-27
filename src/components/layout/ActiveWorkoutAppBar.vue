@@ -24,6 +24,8 @@ export default {
 
     <v-spacer />
 
-    <v-btn icon right @click="leaveWorkout()">X</v-btn>
+    <v-btn icon right @click="leaveWorkout()">
+      <v-icon>exit_to_app</v-icon>
+    </v-btn>
   </v-app-bar>
 </template>

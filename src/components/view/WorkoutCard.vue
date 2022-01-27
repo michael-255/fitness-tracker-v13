@@ -1,5 +1,6 @@
 <script>
-import { ENTITY, VIEW } from '../../constants/globals.js'
+import { mapGetters } from 'vuex'
+import { VIEW } from '../../constants/globals.js'
 
 export default {
   props: {
@@ -10,43 +11,37 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['getPreviousWorkoutReadableDate', 'isWorkoutInProgress']),
+
     workoutName() {
       return this.workout?.name
     },
 
     previousWorkoutDate() {
-      return (
-        this.$store.getters.getPreviousWorkoutRecordCreatedDate(
-          this.workout?.id
-        ) ?? 'No previous records'
-      )
+      return this.getPreviousWorkoutReadableDate(this.workout?.id)
     },
 
     previousWorkoutDuration() {
-      return (
-        this.$store.getters.getPreviousWorkoutRecordDuration(
-          this.workout?.id
-        ) ?? '-'
-      )
+      return '-'
     },
   },
 
   methods: {
     beginWorkout() {
-      const activeWorkout = this.$store.getters.isStateReady(
-        ENTITY.activeWorkout
-      )
-
-      if (!activeWorkout) {
-        this.routeToActiveWorkout()
+      if (this.isWorkoutInProgress) {
+        this.replaceWorkout()
       } else {
-        if (confirm('Replace in progress workout?')) {
-          this.routeToActiveWorkout()
-        }
+        this.routeToNewWorkout()
       }
     },
 
-    async routeToActiveWorkout() {
+    replaceWorkout() {
+      if (confirm('Replace in progress workout?')) {
+        this.routeToNewWorkout()
+      }
+    },
+
+    async routeToNewWorkout() {
       this.$router.push({ name: VIEW.activeWorkout })
       await this.$store.dispatch('beginNewWorkout', this.workout)
     },
@@ -59,7 +54,7 @@ export default {
     <v-card>
       <v-card-title>{{ workoutName }}</v-card-title>
 
-      <v-card-subtitle>
+      <v-card-subtitle class="pb-0">
         {{ previousWorkoutDate }}
         <br />
         {{ previousWorkoutDuration }}

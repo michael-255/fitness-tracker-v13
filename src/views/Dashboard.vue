@@ -12,11 +12,7 @@ export default {
   },
 
   created() {
-    // Ensure active entities are current if moving between pages
-    this.$store.dispatch('refreshStateFromStorage', [
-      ENTITY.activeWorkout,
-      ENTITY.activeExercises,
-    ])
+    this.$store.dispatch('ensureActiveStateIsRefreshed')
   },
 
   computed: {

@@ -26,8 +26,8 @@ export default {
   <v-col class="col-12">
     <v-card>
       <v-card-title class="pb-0">
-        <v-icon>settings</v-icon>
-        <span class="ml-3">Control Panel</span>
+        <v-icon class="mr-3">settings</v-icon>
+        <span>Control Panel</span>
       </v-card-title>
 
       <v-card-actions class="pt-0">

@@ -30,10 +30,6 @@
     // https://github.com/mrmlnc/vscode-scss
     "mrmlnc.vscode-scss",
 
-    // Bracket Pair Colorizer 2
-    // https://github.com/CoenraadS/Bracket-Pair-Colorizer-2
-    "coenraads.bracket-pair-colorizer-2",
-
     // GitLens
     // https://github.com/eamodio/vscode-gitlens
     "eamodio.gitlens"

@@ -3,15 +3,13 @@ import { VIEW } from '../../constants/globals.js'
 
 export default {
   computed: {
-    // activeWorkout() {
-    //   return this.$store.getters.getState(ENTITY.activeWorkout)[0]
-    // },
-    // activeWorkoutName() {
-    //   return this.activeWorkout?.name
-    // },
-    // activeWorkoutRecordCreatedAt() {
-    //   return this.$store.getters['getActiveWorkoutRecordCreatedAt']
-    // },
+    activeWorkoutName() {
+      return this.$store.getters.getActiveWorkoutName
+    },
+
+    activeWorkoutCreatedDate() {
+      return this.$store.getters.getActiveWorkoutCreatedDate
+    },
   },
 
   methods: {
@@ -20,7 +18,7 @@ export default {
     },
 
     async cancelWorkout() {
-      if (confirm('Cancel this active workout?')) {
+      if (confirm('Cancel this workout?')) {
         await this.$store.dispatch('cancelWorkout')
       }
     },
@@ -33,15 +31,17 @@ export default {
     <v-card>
       <v-card-title>{{ activeWorkoutName }}</v-card-title>
 
-      <v-card-subtitle>
-        @todo: Wed Jan 26 2022
+      <v-card-subtitle class="pb-0">
+        {{ activeWorkoutCreatedDate }}
       </v-card-subtitle>
 
-      <v-btn icon absolute top right @click="cancelWorkout()">X</v-btn>
+      <v-btn icon absolute top right color="error" @click="cancelWorkout()">
+        <v-icon>delete_forever</v-icon>
+      </v-btn>
 
       <v-card-actions>
         <v-container>
-          <v-btn color="success" @click="resumeWorkout()">
+          <v-btn small color="success" @click="resumeWorkout()">
             Resume Workout
           </v-btn>
         </v-container>

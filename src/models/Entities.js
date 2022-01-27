@@ -27,12 +27,14 @@ export class Record {
   constructor({
     id = uuid(),
     entityId = null,
+    entityName = 'Entity',
     createdTime = new Date().getTime(),
     createdDate = new Date().toDateString(),
     data = {},
   } = {}) {
     this.id = id
     this.entityId = entityId
+    this.entityName = entityName
     this.createdTime = createdTime
     this.createdDate = createdDate
     this.data = data
