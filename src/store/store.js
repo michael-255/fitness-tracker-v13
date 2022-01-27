@@ -41,13 +41,10 @@ export default new Vuex.Store({
      * Initializes local storage if needed, then saturates the app state from
      * it if any data is found there.
      */
-    startApp({ commit }) {
+    startApp({ dispatch }) {
       const entityKeys = Object.keys(ENTITY)
       LocalStorage.initializeByKeys(entityKeys)
-      entityKeys.forEach((entity) => {
-        const data = LocalStorage.get(entity)
-        commit('SET_ENTITY', { entity, data })
-      })
+      dispatch('refreshStateFromStorage', entityKeys)
     },
 
     /**
@@ -68,6 +65,13 @@ export default new Vuex.Store({
       entityKeys.forEach((entity) => {
         const data = entityDefaults[entity]
         LocalStorage.overwrite(entity, data)
+        commit('SET_ENTITY', { entity, data })
+      })
+    },
+
+    refreshStateFromStorage({ commit }, entityKeys) {
+      entityKeys.map((entity) => {
+        const data = LocalStorage.get(entity)
         commit('SET_ENTITY', { entity, data })
       })
     },
@@ -110,19 +114,19 @@ export default new Vuex.Store({
     },
 
     getPreviousExerciseRecord: (state) => (exerciseId) => {
-      console.log(state, exerciseId)
+      console.log('getPreviousExerciseRecord:', state, exerciseId)
     },
 
     getPreviousWorkoutRecord: (state) => (workoutId) => {
-      console.log(state, workoutId)
+      console.log('getPreviousWorkoutRecord:', state, workoutId)
     },
 
     getPreviousWorkoutRecordCreatedDate: (state) => (workoutId) => {
-      console.log(state, workoutId)
+      console.log('getPreviousWorkoutRecordCreatedDate:', state, workoutId)
     },
 
     getPreviousWorkoutRecordDuration: (state) => (workoutId) => {
-      console.log(state, workoutId)
+      console.log('getPreviousWorkoutRecordDuration:', state, workoutId)
     },
 
     // How to get the latest record...
