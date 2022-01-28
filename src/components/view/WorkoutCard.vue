@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { VIEW } from '../../constants/globals.js'
-import { getDurationFromMilliseconds } from '../../utils/string-formatters.js'
+import { getDaysSinceFromDate } from '../../utils/string-formatters.js'
 
 export default {
   props: {
@@ -13,9 +13,8 @@ export default {
 
   computed: {
     ...mapGetters([
-      'getPreviousWorkoutCreatedDateById',
-      'getPreviousWorkoutCreatedTimeById',
-      'getPreviousWorkoutEndTimeById',
+      'getPreviousWorkoutDateById',
+      'getPreviousWorkoutDurationById',
       'isWorkoutInProgress',
     ]),
 
@@ -23,14 +22,16 @@ export default {
       return this.workout?.name
     },
 
-    previousWorkoutCreatedDate() {
-      return this.getPreviousWorkoutCreatedDateById(this.workout?.id)
+    previousWorkoutDate() {
+      return this.getPreviousWorkoutDateById(this.workout?.id)
     },
 
     previousWorkoutDuration() {
-      const startTime = this.getPreviousWorkoutCreatedTimeById(this.workout?.id)
-      const endTime = this.getPreviousWorkoutEndTimeById(this.workout?.id)
-      return getDurationFromMilliseconds(endTime - startTime)
+      return this.getPreviousWorkoutDurationById(this.workout?.id)
+    },
+
+    daysSinceLastWorkout() {
+      return getDaysSinceFromDate(this.previousWorkoutDate)
     },
   },
 
@@ -63,11 +64,21 @@ export default {
       <v-card-title>{{ workoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
-        <v-icon small class="mr-1">event_available</v-icon>
-        <span>{{ previousWorkoutCreatedDate }}</span>
-        <br />
-        <v-icon small class="mr-1">timer</v-icon>
-        <span>{{ previousWorkoutDuration }}</span>
+        <div>
+          <v-icon small class="mr-1">event_available</v-icon>
+          <span>{{ previousWorkoutDate }}</span>
+          <v-badge
+            v-show="this.daysSinceLastWorkout"
+            class="ml-1"
+            inline
+            color="secondary"
+            :content="this.daysSinceLastWorkout"
+          />
+        </div>
+        <div>
+          <v-icon small class="mr-1">timer</v-icon>
+          <span>{{ previousWorkoutDuration }}</span>
+        </div>
       </v-card-subtitle>
 
       <v-card-actions>

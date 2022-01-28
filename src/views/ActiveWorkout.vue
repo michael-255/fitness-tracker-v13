@@ -1,12 +1,12 @@
 <script>
 import { ENTITY, VIEW } from '../constants/globals'
-import ActiveExerciseCard from '../components/view/ActiveExerciseCard.vue'
+// import ActiveExerciseCard from '../components/view/ActiveExerciseCard.vue'
 
 export default {
   name: VIEW.activeWorkout,
 
   components: {
-    ActiveExerciseCard,
+    // ActiveExerciseCard,
   },
 
   computed: {
@@ -28,11 +28,11 @@ export default {
 
 <template>
   <v-container>
-    <ActiveExerciseCard
+    <!-- <ActiveExerciseCard
       v-for="activeExercise of activeExercises"
       :key="activeExercise.id"
       :exerciseRecord="activeExercise"
-    />
+    /> -->
 
     <v-btn class="ml-3" color="success" @click="finishWorkout()">
       Finish Workout

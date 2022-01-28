@@ -7,8 +7,8 @@ export default {
       return this.$store.getters.getActiveWorkoutName
     },
 
-    activeWorkoutCreatedDate() {
-      return this.$store.getters.getActiveWorkoutCreatedDate
+    activeWorkoutDate() {
+      return this.$store.getters.getActiveWorkoutDate
     },
   },
 
@@ -33,7 +33,7 @@ export default {
 
       <v-card-subtitle class="pb-0">
         <v-icon small class="mr-1">start</v-icon>
-        <span>{{ activeWorkoutCreatedDate }}</span>
+        <span>{{ activeWorkoutDate }}</span>
       </v-card-subtitle>
 
       <v-btn icon absolute top right color="error" @click="cancelWorkout()">

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from '../utils/local-storage.js'
 import createDefaultEntityData from '../utils/defaults-generator.js'
+import { getDurationFromMilliseconds } from '../utils/string-formatters.js'
 import { Record } from '../models/Entities.js'
 import { ENTITY } from '../constants/globals.js'
 
@@ -67,8 +68,8 @@ export default new Vuex.Store({
 
       entityKeys.forEach((entity) => {
         const data = entityDefaults[entity]
-        LocalStorage.overwrite(entity, data)
         commit('SET_ENTITY', { entity, data })
+        LocalStorage.overwrite(entity, data)
       })
     },
 
@@ -99,7 +100,14 @@ export default new Vuex.Store({
         const exerciseName = getters.getExerciseNameById(eid)
         return new Record({ entityId: eid, entityName: exerciseName })
       })
-      const newWorkoutRecord = new Record({ entityId: id, entityName: name })
+      const newWorkoutRecord = new Record({
+        entityId: id,
+        entityName: name,
+        data: {
+          date: new Date().toDateString(),
+          duration: null,
+        },
+      })
 
       commit('SET_ENTITY', {
         entity: ENTITY.activeExercises,
@@ -113,15 +121,52 @@ export default new Vuex.Store({
       LocalStorage.overwrite(ENTITY.activeWorkout, [newWorkoutRecord])
     },
 
-    cancelWorkout({ commit }) {
+    clearActiveStateAndStorage({ commit }) {
       const entities = [ENTITY.activeExercises, ENTITY.activeWorkout]
       LocalStorage.clearByKeys(entities)
       commit('SET_ENTITY', { entity: entities[0], data: [] })
       commit('SET_ENTITY', { entity: entities[1], data: [] })
     },
 
-    finishWorkout() {
-      console.log('finishWorkout clicked!')
+    cancelWorkout({ dispatch }) {
+      dispatch('clearActiveStateAndStorage')
+    },
+
+    finishWorkout({ commit, dispatch, state }) {
+      const activeExercises = state[ENTITY.activeExercises]
+      const activeWorkout = state[ENTITY.activeWorkout]
+
+      const endedAt = new Date().getTime()
+      activeWorkout[0].data.endedAt = endedAt
+      activeWorkout[0].data.duration = getDurationFromMilliseconds(
+        endedAt - activeWorkout[0].createdAt
+      )
+
+      /**
+       * @todo Any final data needed for execise records before saving?
+       */
+
+      const newExerciseRecords = [
+        ...state[ENTITY.exerciseRecords],
+        ...activeExercises,
+      ]
+      const newWorkoutRecords = [
+        ...state[ENTITY.workoutRecords],
+        ...activeWorkout,
+      ]
+
+      commit('SET_ENTITY', {
+        entity: ENTITY.exerciseRecords,
+        data: newExerciseRecords,
+      })
+      commit('SET_ENTITY', {
+        entity: ENTITY.workoutRecords,
+        data: newWorkoutRecords,
+      })
+      LocalStorage.overwrite(ENTITY.exerciseRecords, newExerciseRecords)
+      LocalStorage.overwrite(ENTITY.workoutRecords, newWorkoutRecords)
+
+      dispatch('clearActiveStateAndStorage')
     },
   },
 
@@ -159,10 +204,17 @@ export default new Vuex.Store({
       return state[ENTITY.activeWorkout][0]?.entityName ?? 'No entityName found'
     },
 
-    getActiveWorkoutCreatedDate: (state) => {
-      return (
-        state[ENTITY.activeWorkout][0]?.createdDate ?? 'No createdDate found'
-      )
+    getActiveWorkoutDate: (state) => {
+      return state[ENTITY.activeWorkout][0]?.data?.date ?? 'No date found'
+    },
+
+    getActiveWorkoutCreatedAt: (state) => {
+      return state[ENTITY.activeWorkout][0]?.createdAt ?? 'No createdAt found'
+    },
+
+    getActiveExerciseById: (state) => (exerciseId) => {
+      console.log('getActiveExerciseById:', state, exerciseId)
+      return {}
     },
 
     /**
@@ -170,49 +222,36 @@ export default new Vuex.Store({
      */
     getMostRecentRecord: (state) => (entity, id) => {
       const filteredRecords = state[entity].filter((r) => r.entityId === id)
-      const sortedRecords = filteredRecords.sort((a, b) => {
-        b.createdTime - a.createdTime
-      })
+      const sortedRecords = filteredRecords.sort(
+        (a, b) => b.createdAt - a.createdAt
+      )
       return sortedRecords[0]
     },
 
-    getPreviousWorkoutCreatedDateById: (_, getters) => (workoutId) => {
+    getPreviousWorkoutDateById: (_, getters) => (workoutId) => {
       const previousRecord = getters.getMostRecentRecord(
         ENTITY.workoutRecords,
         workoutId
       )
 
-      if (!previousRecord?.createdDate) {
+      if (!previousRecord?.data?.date) {
         return 'No previous records'
       }
 
-      return previousRecord.createdDate
+      return previousRecord.data.date
     },
 
-    getPreviousWorkoutCreatedTimeById: (_, getters) => (workoutId) => {
+    getPreviousWorkoutDurationById: (_, getters) => (workoutId) => {
       const previousRecord = getters.getMostRecentRecord(
         ENTITY.workoutRecords,
         workoutId
       )
 
-      if (!previousRecord?.createdTime) {
+      if (!previousRecord?.data?.duration) {
         return '-'
       }
 
-      return previousRecord.createdTime
-    },
-
-    getPreviousWorkoutEndTimeById: (_, getters) => (workoutId) => {
-      const previousRecord = getters.getMostRecentRecord(
-        ENTITY.workoutRecords,
-        workoutId
-      )
-
-      if (!previousRecord?.data?.endTime) {
-        return new Date().getTime()
-      }
-
-      return previousRecord.data.endTime
+      return previousRecord.data.duration
     },
   },
 

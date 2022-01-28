@@ -28,15 +28,13 @@ export class Record {
     id = uuid(),
     entityId = null,
     entityName = 'My Entity',
-    createdDate = new Date().toDateString(),
-    createdTime = new Date().getTime(),
+    createdAt = new Date().getTime(),
     data = {},
   } = {}) {
     this.id = id
     this.entityId = entityId
     this.entityName = entityName
-    this.createdDate = createdDate
-    this.createdTime = createdTime
+    this.createdAt = createdAt
     this.data = data
   }
 }

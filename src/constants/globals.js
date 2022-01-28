@@ -4,6 +4,7 @@
 export const DATA_VERSION = Object.freeze('FTData-v1')
 
 export const MILLISECONDS = Object.freeze({
+  perDay: 86400000,
   perHour: 3600000,
   perMinute: 60000,
   perSecond: 1000,
