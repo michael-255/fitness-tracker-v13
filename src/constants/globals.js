@@ -1,7 +1,7 @@
 /**
- * Use this as a prefix for LocalStorage fields to make them unique.
+ * Use this as a prefix for LocalStorage fields to make them unique per version.
  */
-export const APP_ID = Object.freeze('FTv13')
+export const DATA_VERSION = Object.freeze('FTData-v1')
 
 export const ICON = Object.freeze({
   sets: 'list',

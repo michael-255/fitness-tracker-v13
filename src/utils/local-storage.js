@@ -1,4 +1,4 @@
-import { APP_ID } from '../constants/globals.js'
+import { DATA_VERSION } from '../constants/globals.js'
 
 const LocalStorage = {
   initializeByKeys(keys, value = []) {
@@ -33,7 +33,7 @@ function getLocalStorage(item) {
 }
 
 function transformItem(item) {
-  return `${APP_ID}-${item}`
+  return `${DATA_VERSION}-${item}`
 }
 
 export default LocalStorage

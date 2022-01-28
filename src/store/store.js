@@ -60,8 +60,11 @@ export default new Vuex.Store({
      * Generate the initial default app data for the state and local storage.
      */
     setDefaultAppData({ commit }) {
+      LocalStorage.initializeByKeys(Object.keys(ENTITY))
+
       const entityDefaults = createDefaultEntityData()
       const entityKeys = Object.keys(entityDefaults)
+
       entityKeys.forEach((entity) => {
         const data = entityDefaults[entity]
         LocalStorage.overwrite(entity, data)
