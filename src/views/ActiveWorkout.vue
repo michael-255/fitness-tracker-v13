@@ -1,5 +1,5 @@
 <script>
-import { VIEW } from '../constants/globals'
+import { ENTITY, VIEW } from '../constants/globals'
 import ActiveExerciseCard from '../components/view/ActiveExerciseCard.vue'
 
 export default {
@@ -10,8 +10,8 @@ export default {
   },
 
   computed: {
-    activeExerciseRecords() {
-      return this.$store.getters['getActiveExercises']
+    activeExercises() {
+      return this.$store.getters.getState(ENTITY.activeExercises)
     },
   },
 
@@ -29,9 +29,9 @@ export default {
 <template>
   <v-container>
     <ActiveExerciseCard
-      v-for="aeRecord of activeExerciseRecords"
-      :key="aeRecord.id"
-      :exerciseRecord="aeRecord"
+      v-for="activeExercise of activeExercises"
+      :key="activeExercise.id"
+      :exerciseRecord="activeExercise"
     />
 
     <v-btn class="ml-3" color="success" @click="finishWorkout()">

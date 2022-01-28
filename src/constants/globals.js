@@ -3,17 +3,6 @@
  */
 export const DATA_VERSION = Object.freeze('FTData-v1')
 
-/**
- * @todo TEMP - remove later
- */
-export const ICON = Object.freeze({
-  sets: 'list',
-  weight: 'fitness_center',
-  reps: 'replay',
-  duration: 'history',
-  distance: 'place',
-})
-
 export const MILLISECONDS = Object.freeze({
   perHour: 3600000,
   perMinute: 60000,

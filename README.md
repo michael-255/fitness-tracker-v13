@@ -2,9 +2,9 @@
 
 Fitness Tracker Web App v13
 
-## Todo
+## Todo - Continue carefully refactoring the project
 
-- Continue refactoring slowly and carefully
+- Implement `finishWorkout` based on old `actions.js` file
 - Workout record summaries
 - Exercise record summaries
 
