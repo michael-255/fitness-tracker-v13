@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { VIEW } from '../../constants/globals.js'
+import { getDurationFromMilliseconds } from '../../utils/string-formatters.js'
 
 export default {
   props: {
@@ -11,18 +12,24 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getPreviousWorkoutReadableDate', 'isWorkoutInProgress']),
+    ...mapGetters([
+      'getPreviousWorkoutCreatedDateById',
+      'getPreviousWorkoutCreatedTimeById',
+      'isWorkoutInProgress',
+    ]),
 
     workoutName() {
       return this.workout?.name
     },
 
-    previousWorkoutDate() {
-      return this.getPreviousWorkoutReadableDate(this.workout?.id)
+    previousWorkoutCreatedDate() {
+      return this.getPreviousWorkoutCreatedDateById(this.workout?.id)
     },
 
     previousWorkoutDuration() {
-      return '-'
+      const startTime = this.getPreviousWorkoutCreatedTimeById(this.workout?.id)
+      const now = new Date().getTime()
+      return getDurationFromMilliseconds(now - startTime)
     },
   },
 
@@ -55,7 +62,7 @@ export default {
       <v-card-title>{{ workoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
-        {{ previousWorkoutDate }}
+        {{ previousWorkoutCreatedDate }}
         <br />
         {{ previousWorkoutDuration }}
       </v-card-subtitle>

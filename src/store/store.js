@@ -156,45 +156,50 @@ export default new Vuex.Store({
     },
 
     getActiveWorkoutName: (state) => {
-      return state[ENTITY.activeWorkout][0]?.entityName ?? 'No entity name'
+      return state[ENTITY.activeWorkout][0]?.entityName ?? 'No entityName found'
+    },
+
+    getActiveWorkoutCreatedTime: (state) => {
+      return (
+        state[ENTITY.activeWorkout][0]?.createdTime ?? 'No createdTime found'
+      )
     },
 
     getActiveWorkoutCreatedDate: (state) => {
       return (
-        state[ENTITY.activeWorkout][0]?.createdDate ?? 'No entity createdDate'
+        state[ENTITY.activeWorkout][0]?.createdDate ?? 'No createdDate found'
       )
     },
 
-    getPreviousExerciseRecord: (state) => (exerciseId) => {
-      console.log('getPreviousExerciseRecord:', state, exerciseId)
-      return null
+    getPreviousWorkoutCreatedDateById: (state) => (workoutId) => {
+      const filterRecords = state[ENTITY.workoutRecords].filter(
+        (wr) => wr.entityId === workoutId
+      )
+      const sortedRecords = filterRecords.sort((a, b) => {
+        b.createdDate - a.createdDate
+      })
+
+      if (!sortedRecords[0]) {
+        return 'No previous records'
+      }
+
+      return sortedRecords[0] // Most recent record
     },
 
-    getPreviousWorkoutRecord: (state) => (workoutId) => {
-      console.log('getPreviousWorkoutRecord:', state, workoutId)
-      return null
-    },
+    getPreviousWorkoutCreatedTimeById: (state) => (workoutId) => {
+      const filterRecords = state[ENTITY.workoutRecords].filter(
+        (wr) => wr.entityId === workoutId
+      )
+      const sortedRecords = filterRecords.sort((a, b) => {
+        b.createdTime - a.createdTime
+      })
 
-    getPreviousWorkoutReadableDate: (state) => (workoutId) => {
-      console.log('getPreviousWorkoutRecordCreatedDate:', state, workoutId)
-      return 'No previous records'
-    },
+      if (!sortedRecords[0]) {
+        return '-'
+      }
 
-    getPreviousWorkoutRecordDuration: (state) => (workoutId) => {
-      console.log('getPreviousWorkoutRecordDuration:', state, workoutId)
-      return '-'
+      return sortedRecords[0] // Most recent record
     },
-
-    // NOTE: How to get the latest record...
-    // getPreviousWorkoutRecord: (state) => (workoutId) => {
-    //   const workoutEntity = state[ENTITY.workouts].find(
-    //     (w) => w.id === workoutId
-    //   )
-    //   const sortedRecords = workoutEntity.records.sort((a, b) => {
-    //     b.createdAt - a.createdAt
-    //   })
-    //   return sortedRecords[0]
-    // },
   },
 
   modules: {},

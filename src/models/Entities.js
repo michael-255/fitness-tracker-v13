@@ -27,7 +27,7 @@ export class Record {
   constructor({
     id = uuid(),
     entityId = null,
-    entityName = 'Entity',
+    entityName = 'My Entity',
     createdTime = new Date().getTime(),
     createdDate = new Date().toDateString(),
     data = {},
