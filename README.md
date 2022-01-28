@@ -4,17 +4,18 @@ Fitness Tracker Web App v13
 
 ## Todo - Continue carefully refactoring the project
 
-- Work on `ActiveWorkout` and `ActiveExerciseCard`
+- Work on `ActiveExerciseCard` and sub components
 - Workout record summaries
 - Exercise record summaries
 - Implement Measurement recording feature
+  - Look at Vuetify components for ideas
 - `ControlPanel` options:
-  - defaults
-  - clear app
-  - export
-  - current data version
-  - Record measurement???
-  - Number of days since last workout???
+  - Reset Defaults
+  - Clear App Data
+  - Export Records
+  - Add a measurement record???
+  - Number of days since last workout of any kind???
+  - Display the current data version (`FTData-v#`)
 
 ## WIP Notes
 

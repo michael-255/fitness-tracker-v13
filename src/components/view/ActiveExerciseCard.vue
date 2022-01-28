@@ -17,23 +17,7 @@ export default {
     exerciseName() {
       return this.exerciseRecord?.entityName
     },
-
-    activeExercise() {
-      return this.$store.getters.getActiveExerciseById(
-        this.exerciseRecord.entityId
-      )
-    },
-
-    setLimit() {
-      if (this.exerciseRecord.sets.length > 0) {
-        return this.exerciseRecord.sets.length
-      } else {
-        return 1
-      }
-    },
   },
-
-  methods: {},
 }
 </script>
 
