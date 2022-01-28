@@ -10,11 +10,6 @@ const routes = [
     redirect: '/dashboard',
   },
   {
-    path: '/login',
-    name: VIEW.login,
-    component: () => import('../views/Login.vue'),
-  },
-  {
     path: '/dashboard',
     name: VIEW.dashboard,
     component: () => import('../views/Dashboard.vue'),

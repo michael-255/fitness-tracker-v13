@@ -62,7 +62,6 @@ const view = 'View'
 
 export const VIEW = Object.freeze({
   notFound: 'NotFound' + view,
-  login: 'Login' + view,
   dashboard: 'Dashboard' + view,
   activeWorkout: 'ActiveWorkout' + view,
 })
