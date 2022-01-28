@@ -159,46 +159,60 @@ export default new Vuex.Store({
       return state[ENTITY.activeWorkout][0]?.entityName ?? 'No entityName found'
     },
 
-    getActiveWorkoutCreatedTime: (state) => {
-      return (
-        state[ENTITY.activeWorkout][0]?.createdTime ?? 'No createdTime found'
-      )
-    },
-
     getActiveWorkoutCreatedDate: (state) => {
       return (
         state[ENTITY.activeWorkout][0]?.createdDate ?? 'No createdDate found'
       )
     },
 
-    getPreviousWorkoutCreatedDateById: (state) => (workoutId) => {
-      const filterRecords = state[ENTITY.workoutRecords].filter(
-        (wr) => wr.entityId === workoutId
-      )
-      const sortedRecords = filterRecords.sort((a, b) => {
-        b.createdDate - a.createdDate
+    /**
+     * Returns only the most recent record from an array of records.
+     */
+    getMostRecentRecord: (state) => (entity, id) => {
+      const filteredRecords = state[entity].filter((r) => r.entityId === id)
+      const sortedRecords = filteredRecords.sort((a, b) => {
+        b.createdTime - a.createdTime
       })
+      return sortedRecords[0]
+    },
 
-      if (!sortedRecords[0]?.createdDate) {
+    getPreviousWorkoutCreatedDateById: (_, getters) => (workoutId) => {
+      const previousRecord = getters.getMostRecentRecord(
+        ENTITY.workoutRecords,
+        workoutId
+      )
+
+      if (!previousRecord?.createdDate) {
         return 'No previous records'
       }
 
-      return sortedRecords[0]?.createdDate
+      return previousRecord.createdDate
     },
 
-    getPreviousWorkoutCreatedTimeById: (state) => (workoutId) => {
-      const filterRecords = state[ENTITY.workoutRecords].filter(
-        (wr) => wr.entityId === workoutId
+    getPreviousWorkoutCreatedTimeById: (_, getters) => (workoutId) => {
+      const previousRecord = getters.getMostRecentRecord(
+        ENTITY.workoutRecords,
+        workoutId
       )
-      const sortedRecords = filterRecords.sort((a, b) => {
-        b.createdTime - a.createdTime
-      })
 
-      if (!sortedRecords[0]?.createdTime) {
+      if (!previousRecord?.createdTime) {
         return '-'
       }
 
-      return sortedRecords[0]?.createdTime
+      return previousRecord.createdTime
+    },
+
+    getPreviousWorkoutEndTimeById: (_, getters) => (workoutId) => {
+      const previousRecord = getters.getMostRecentRecord(
+        ENTITY.workoutRecords,
+        workoutId
+      )
+
+      if (!previousRecord?.data?.endTime) {
+        return new Date().getTime()
+      }
+
+      return previousRecord.data.endTime
     },
   },
 

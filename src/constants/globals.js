@@ -3,6 +3,9 @@
  */
 export const DATA_VERSION = Object.freeze('FTData-v1')
 
+/**
+ * @todo TEMP - remove later
+ */
 export const ICON = Object.freeze({
   sets: 'list',
   weight: 'fitness_center',

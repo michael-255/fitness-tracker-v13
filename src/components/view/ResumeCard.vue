@@ -32,7 +32,8 @@ export default {
       <v-card-title>{{ activeWorkoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
-        {{ activeWorkoutCreatedDate }}
+        <v-icon small class="mr-1">start</v-icon>
+        <span>{{ activeWorkoutCreatedDate }}</span>
       </v-card-subtitle>
 
       <v-btn icon absolute top right color="error" @click="cancelWorkout()">

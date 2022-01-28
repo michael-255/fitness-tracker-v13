@@ -15,6 +15,7 @@ export default {
     ...mapGetters([
       'getPreviousWorkoutCreatedDateById',
       'getPreviousWorkoutCreatedTimeById',
+      'getPreviousWorkoutEndTimeById',
       'isWorkoutInProgress',
     ]),
 
@@ -28,8 +29,8 @@ export default {
 
     previousWorkoutDuration() {
       const startTime = this.getPreviousWorkoutCreatedTimeById(this.workout?.id)
-      const now = new Date().getTime()
-      return getDurationFromMilliseconds(now - startTime)
+      const endTime = this.getPreviousWorkoutEndTimeById(this.workout?.id)
+      return getDurationFromMilliseconds(endTime - startTime)
     },
   },
 
