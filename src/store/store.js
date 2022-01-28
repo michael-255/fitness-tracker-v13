@@ -179,11 +179,11 @@ export default new Vuex.Store({
         b.createdDate - a.createdDate
       })
 
-      if (!sortedRecords[0]) {
+      if (!sortedRecords[0]?.createdDate) {
         return 'No previous records'
       }
 
-      return sortedRecords[0] // Most recent record
+      return sortedRecords[0]?.createdDate
     },
 
     getPreviousWorkoutCreatedTimeById: (state) => (workoutId) => {
@@ -194,11 +194,11 @@ export default new Vuex.Store({
         b.createdTime - a.createdTime
       })
 
-      if (!sortedRecords[0]) {
+      if (!sortedRecords[0]?.createdTime) {
         return '-'
       }
 
-      return sortedRecords[0] // Most recent record
+      return sortedRecords[0]?.createdTime
     },
   },
 

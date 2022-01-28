@@ -62,9 +62,11 @@ export default {
       <v-card-title>{{ workoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
-        {{ previousWorkoutCreatedDate }}
+        <v-icon small class="mr-1">event_available</v-icon>
+        <span>{{ previousWorkoutCreatedDate }}</span>
         <br />
-        {{ previousWorkoutDuration }}
+        <v-icon small class="mr-1">timer</v-icon>
+        <span>{{ previousWorkoutDuration }}</span>
       </v-card-subtitle>
 
       <v-card-actions>
