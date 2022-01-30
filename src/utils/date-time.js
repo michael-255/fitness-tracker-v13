@@ -39,7 +39,7 @@ export function getDaysSinceFromDate(date) {
   if (diffInDays < 1) {
     return 'today'
   } else {
-    return `${diffInDays} days ago`
+    return `${Math.floor(diffInDays)} days ago`
   }
 }
 

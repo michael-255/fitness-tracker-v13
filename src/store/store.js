@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import LocalStorage from '../utils/local-storage.js'
 import createDefaultEntityData from '../utils/defaults-generator.js'
-import { getDurationFromMilliseconds } from '../utils/string-formatters.js'
+import { getDurationFromMilliseconds } from '../utils/date-time.js'
 import { Record } from '../models/Entities.js'
 import { ENTITY } from '../constants/globals.js'
 
