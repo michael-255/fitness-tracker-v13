@@ -1,5 +1,4 @@
 import { Measurement, Exercise, Workout } from '../models/Entities.js'
-import { EXERCISE_INPUTS } from '../constants/globals.js'
 
 /**
  * Using a few pre-generated ids so new workouts and exercises can be added
@@ -174,27 +173,27 @@ function initDefaultExercises() {
     new Exercise({
       id: DEFAULT_IDS.exercises[0],
       name: 'Barbell Squats',
-      inputs: EXERCISE_INPUTS.weightLifting5Set,
+      setCount: 5,
     }),
     new Exercise({
       id: DEFAULT_IDS.exercises[1],
       name: 'Barbell Bench Press',
-      inputs: EXERCISE_INPUTS.weightLifting5Set,
+      setCount: 5,
     }),
     new Exercise({
       id: DEFAULT_IDS.exercises[2],
       name: 'Barbell Rows',
-      inputs: EXERCISE_INPUTS.weightLifting5Set,
+      setCount: 5,
     }),
     new Exercise({
       id: DEFAULT_IDS.exercises[3],
       name: 'Barbell Overhead Press',
-      inputs: EXERCISE_INPUTS.weightLifting5Set,
+      setCount: 5,
     }),
     new Exercise({
       id: DEFAULT_IDS.exercises[4],
       name: 'Deadlift',
-      inputs: EXERCISE_INPUTS.weightLifting5Set,
+      setCount: 5,
     }),
   ]
 }
@@ -205,7 +204,7 @@ function initDefaultExercises() {
  */
 function initDefaultWorkouts(defaultExercises) {
   const getExerciseIdByName = (name) => {
-    return defaultExercises.find((exer) => exer.name === name).id
+    return defaultExercises.find((de) => de.name === name).id
   }
 
   return [

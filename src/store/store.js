@@ -96,10 +96,22 @@ export default new Vuex.Store({
 
     beginNewWorkout({ commit, getters }, workout) {
       const { id, name, exerciseIds } = workout
+
       const newExerciseRecords = exerciseIds.map((eid) => {
-        const exerciseName = getters.getExerciseNameById(eid)
-        return new Record({ entityId: eid, entityName: exerciseName })
+        const exercise = getters.getExerciseById(eid)
+
+        return new Record({
+          entityId: eid,
+          entityName: exercise.name,
+          data: {
+            sets: new Array(exercise.setCount).fill({
+              weight: 0,
+              reps: 0,
+            }),
+          },
+        })
       })
+
       const newWorkoutRecord = new Record({
         entityId: id,
         entityName: name,
@@ -194,10 +206,30 @@ export default new Vuex.Store({
       return state[entity]
     },
 
+    getExerciseById: (state) => (exerciseId) => {
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)
+    },
+
     getExerciseNameById: (state) => (exerciseId) => {
-      return state[ENTITY.exercises].find(
-        (exercise) => exercise.id === exerciseId
-      )?.name
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)?.name
+    },
+
+    getExerciseInputsById: (state) => (exerciseId) => {
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)?.inputs
+    },
+
+    getExerciseSetCountById: (state) => (exerciseId) => {
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)?.setCount
+    },
+
+    getExerciseInputHasWeightById: (state) => (exerciseId) => {
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)?.inputs
+        ?.hasWeight
+    },
+
+    getExerciseInputHasRepsById: (state) => (exerciseId) => {
+      return state[ENTITY.exercises].find((e) => e.id === exerciseId)?.inputs
+        ?.hasReps
     },
 
     getActiveWorkoutName: (state) => {

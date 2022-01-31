@@ -1,18 +1,12 @@
 <script>
-import { ENTITY, VIEW } from '../constants/globals'
-import ActiveExerciseCard from '../components/view/ActiveExerciseCard.vue'
+import { VIEW } from '../constants/globals'
+import ActiveExercisesContainer from '../components/view/ActiveExercisesContainer.vue'
 
 export default {
   name: VIEW.activeWorkout,
 
   components: {
-    ActiveExerciseCard,
-  },
-
-  computed: {
-    activeExercises() {
-      return this.$store.getters.getState(ENTITY.activeExercises)
-    },
+    ActiveExercisesContainer,
   },
 
   methods: {
@@ -28,14 +22,14 @@ export default {
 
 <template>
   <v-container>
-    <ActiveExerciseCard
-      v-for="activeExercise of activeExercises"
-      :key="activeExercise.id"
-      :exerciseRecord="activeExercise"
-    />
+    <ActiveExercisesContainer />
 
-    <v-btn class="ml-3" color="success" @click="finishWorkout()">
-      Finish Workout
-    </v-btn>
+    <v-row class="mb-3 mt-5">
+      <v-spacer />
+      <v-btn large color="success" @click="finishWorkout()">
+        Finish Workout
+      </v-btn>
+      <v-spacer />
+    </v-row>
   </v-container>
 </template>

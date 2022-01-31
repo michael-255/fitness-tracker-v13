@@ -8,10 +8,10 @@ export class Measurement {
 }
 
 export class Exercise {
-  constructor({ id = uuid(), name = 'My Exercise', inputs = {} } = {}) {
+  constructor({ id = uuid(), name = 'My Exercise', setCount = 1 } = {}) {
     this.id = id
     this.name = name
-    this.inputs = inputs
+    this.setCount = setCount
   }
 }
 

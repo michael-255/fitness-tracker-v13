@@ -21,29 +21,6 @@ export const ENTITY = Object.freeze({
   activeWorkout: 'activeWorkout',
 })
 
-export const EXERCISE_INPUTS = Object.freeze({
-  weightLifting3Set: {
-    setCount: 3,
-    weight: true,
-    reps: true,
-  },
-  weightLifting4Set: {
-    setCount: 4,
-    weight: true,
-    reps: true,
-  },
-  weightLifting5Set: {
-    setCount: 5,
-    weight: true,
-    reps: true,
-  },
-  weightLifting10Set: {
-    setCount: 10,
-    weight: true,
-    reps: true,
-  },
-})
-
 const layout = 'Layout'
 
 export const LAYOUT = Object.freeze({
