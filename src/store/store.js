@@ -107,8 +107,8 @@ export default new Vuex.Store({
           entityName: exercise.name,
           data: {
             sets: new Array(exercise.inputs.setCount).fill({
-              weight: 0,
-              reps: 0,
+              weight: null,
+              reps: null,
             }),
           },
         })
@@ -178,6 +178,27 @@ export default new Vuex.Store({
 
       dispatch('removeActiveWorkout')
     },
+
+    updateActiveExercises({ commit, getters }, updatedRecord) {
+      const activeExerciseRecords = getters.getState(ENTITY.activeExercises)
+
+      arrayWrap(updatedRecord).forEach((ur) => {
+        const index = activeExerciseRecords.findIndex(
+          (i) => i.entityId === ur.entityId
+        )
+
+        if (index === -1) {
+          activeExerciseRecords.push(ur)
+        } else {
+          activeExerciseRecords[index] = ur
+        }
+      })
+
+      commit('SET_ENTITY', {
+        entity: ENTITY.activeExercises,
+        data: activeExerciseRecords,
+      })
+    },
   },
 
   // GETTERS ------------------------------------------------------------------
@@ -226,12 +247,6 @@ export default new Vuex.Store({
       return getters.getEntityById(ENTITY.workouts, workoutId)?.name
     },
 
-    // Active Exercises
-
-    /**
-     * @todo
-     */
-
     // Active Workout
 
     getActiveWorkout: (state) => state[ENTITY.activeWorkout][0], // Should only be one
@@ -258,6 +273,28 @@ export default new Vuex.Store({
         (a, b) => b.createdAt - a.createdAt
       )
       return sortedRecords[0] // Only most recent record
+    },
+
+    getPreviousExerciseWeightBySetAndId: (_, getters) => (
+      setNumber,
+      exerciseId
+    ) => {
+      const previousRecord = getters.getPreviousRecord(
+        ENTITY.records,
+        exerciseId
+      )
+      return previousRecord?.data?.sets?.[setNumber]?.weight ?? 0
+    },
+
+    getPreviousExerciseRepsBySetAndId: (_, getters) => (
+      setNumber,
+      exerciseId
+    ) => {
+      const previousRecord = getters.getPreviousRecord(
+        ENTITY.records,
+        exerciseId
+      )
+      return previousRecord?.data?.sets?.[setNumber]?.reps ?? 0
     },
 
     getPreviousWorkoutDateById: (_, getters) => (workoutId) => {

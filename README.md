@@ -4,7 +4,6 @@ Fitness Tracker Web App v13
 
 ## Todo - Continue carefully refactoring the project
 
-- Work on `ActiveExerciseCard` and sub components
 - Workout record summaries
 - Exercise record summaries
 - Implement Measurement recording feature

@@ -1,58 +1,86 @@
 <script>
 export default {
   props: {
-    setNumber: {
-      type: Number,
-      default: null,
-    },
-    inputs: {
-      type: String,
-      required: true,
-    },
-    exerciseRecordId: {
+    activeExercise: {
       type: Object,
       required: true,
     },
+    setNumber: {
+      type: Number,
+      required: true,
+    },
   },
+
   data() {
     return {
-      value: 0,
+      weight: null,
+      reps: null,
     }
+  },
+
+  computed: {
+    exerciseId() {
+      return this.activeExercise?.entityId
+    },
+
+    previousWeight() {
+      return this.$store.getters
+        .getPreviousExerciseWeightBySetAndId(this.setNumber, this.exerciseId)
+        .toString()
+    },
+
+    previousReps() {
+      return this.$store.getters
+        .getPreviousExerciseRepsBySetAndId(this.setNumber, this.exerciseId)
+        .toString()
+    },
   },
 
   methods: {
     saveChanges() {
-      let data = {}
+      const updatedRecord = this.activeExercise
 
-      if (!data.sets) {
-        data.sets = []
-        data.sets[this.setNumber] = {}
-        data.sets[this.setNumber][this.dataType] = this.value
+      updatedRecord.data.sets[this.setNumber] = {
+        weight: this.weight,
+        reps: this.reps,
       }
 
-      if (!data.sets[this.setNumber]) {
-        data.sets[this.setNumber] = {}
-        data.sets[this.setNumber][this.dataType] = this.value
-      }
-
-      if (!data.sets[this.setNumber][this.dataType]) {
-        data.sets[this.setNumber][this.dataType] = this.value
-      }
-
-      this.$store.dispatch('updateActiveExerciseSet', this.value)
+      this.$store.dispatch('updateActiveExercises', updatedRecord)
     },
   },
 }
 </script>
 
 <template>
-  <v-text-field
-    @blur="saveChanges()"
-    type="number"
-    label="5"
-    dense
-    outlined
-    hide-details
-    class="my-2"
-  />
+  <tr>
+    <td class="px-1">
+      <v-avatar size="32" color="info">{{ setNumber + 1 }}</v-avatar>
+    </td>
+
+    <td class="px-1">
+      <v-text-field
+        v-model="weight"
+        @blur="saveChanges()"
+        type="number"
+        :label="previousWeight"
+        dense
+        outlined
+        hide-details
+        class="my-2"
+      />
+    </td>
+
+    <td class="px-1">
+      <v-text-field
+        v-model="reps"
+        @blur="saveChanges()"
+        type="number"
+        :label="previousReps"
+        dense
+        outlined
+        hide-details
+        class="my-2"
+      />
+    </td>
+  </tr>
 </template>

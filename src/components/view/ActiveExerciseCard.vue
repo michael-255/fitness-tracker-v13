@@ -1,4 +1,6 @@
 <script>
+import ActiveExerciseSet from './ActiveExerciseSet.vue'
+
 export default {
   props: {
     activeExercise: {
@@ -7,9 +9,17 @@ export default {
     },
   },
 
+  components: {
+    ActiveExerciseSet,
+  },
+
   computed: {
     exerciseName() {
       return this.activeExercise?.entityName
+    },
+
+    exerciseId() {
+      return this.activeExercise?.entityId
     },
 
     setCount() {
@@ -38,44 +48,26 @@ export default {
               <thead>
                 <tr>
                   <th class="text-left px-1">Set</th>
+
                   <th class="text-left px-1">
                     <v-icon small class="mr-1">fitness_center</v-icon>
                     <span>Weight</span>
                   </th>
+
                   <th class="text-left px-1">
                     <v-icon small class="mr-1">filter_list</v-icon>
                     <span>Reps</span>
                   </th>
                 </tr>
               </thead>
+
               <tbody>
-                <tr v-for="i in setCount" :key="i">
-                  <td class="px-1">
-                    <v-avatar size="32" color="info">{{ i }}</v-avatar>
-                  </td>
-                  <td class="px-1">
-                    <v-text-field
-                      @blur="saveChanges()"
-                      type="number"
-                      label="135"
-                      dense
-                      outlined
-                      hide-details
-                      class="my-2"
-                    />
-                  </td>
-                  <td class="px-1">
-                    <v-text-field
-                      @blur="saveChanges()"
-                      type="number"
-                      label="5"
-                      dense
-                      outlined
-                      hide-details
-                      class="my-2"
-                    />
-                  </td>
-                </tr>
+                <ActiveExerciseSet
+                  v-for="i in setCount"
+                  :key="i"
+                  :activeExercise="activeExercise"
+                  :setNumber="i - 1"
+                />
               </tbody>
             </template>
           </v-simple-table>
