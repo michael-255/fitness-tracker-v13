@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { VIEW } from '../../constants/globals.js'
-import { getDaysSinceFromDate } from '../../utils/date-time.js'
+import { getDaysSinceFromDate } from '../../utils/time.js'
 
 export default {
   props: {

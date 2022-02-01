@@ -1,17 +1,9 @@
 <script>
 import ControlPanelCard from './ControlPanelCard.vue'
-import ResumeCard from './ResumeCard.vue'
 
 export default {
   components: {
-    ResumeCard,
     ControlPanelCard,
-  },
-
-  computed: {
-    renderResumeCard() {
-      return this.$store.getters.isWorkoutInProgress
-    },
   },
 }
 </script>
@@ -23,6 +15,5 @@ export default {
     </v-col>
 
     <ControlPanelCard />
-    <ResumeCard v-if="renderResumeCard" />
   </v-row>
 </template>

@@ -37,13 +37,13 @@ export default {
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center px-1">Set</th>
+                  <th class="text-left px-1">Set</th>
                   <th class="text-left px-1">
-                    <v-icon class="mr-1">fitness_center</v-icon>
+                    <v-icon small class="mr-1">fitness_center</v-icon>
                     <span>Weight</span>
                   </th>
                   <th class="text-left px-1">
-                    <v-icon class="mr-1">filter_list</v-icon>
+                    <v-icon small class="mr-1">filter_list</v-icon>
                     <span>Reps</span>
                   </th>
                 </tr>

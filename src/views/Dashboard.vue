@@ -12,7 +12,11 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('ensureActiveStateIsRefreshed')
+    // Ensures active state is up-to-date during page loads and crashes
+    this.$store.dispatch('setStateFromStorage', [
+      ENTITY.activeExercises,
+      ENTITY.activeWorkout,
+    ])
   },
 
   computed: {

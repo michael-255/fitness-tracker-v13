@@ -1,20 +1,28 @@
+import { arrayWrap } from './common.js'
 import { DATA_VERSION } from '../constants/globals.js'
 
 const LocalStorage = {
-  initializeByKeys(keys, value = []) {
-    keys.forEach((key) => {
+  /**
+   * Initialize local storage by key(s) with the defined value.
+   */
+  initByKeys(keys, initValue = []) {
+    arrayWrap(keys).forEach((key) => {
       const existingData = getLocalStorage(key)
+
       if (!existingData) {
-        this.clearByKeys([key], value)
+        setLocalStorage(key, initValue)
       }
     })
   },
 
-  clearByKeys(keys, value = []) {
-    keys.forEach((key) => setLocalStorage(key, value))
+  /**
+   * Clear local storage key(s) with the defined value.
+   */
+  clearByKeys(keys, clearValue = []) {
+    arrayWrap(keys).forEach((key) => setLocalStorage(key, clearValue))
   },
 
-  overwrite(key, value) {
+  set(key, value) {
     setLocalStorage(key, value)
   },
 
@@ -23,17 +31,17 @@ const LocalStorage = {
   },
 }
 
-function setLocalStorage(item, data) {
-  const json = JSON.stringify(data)
-  localStorage.setItem(transformItem(item), json)
+function setLocalStorage(key, value) {
+  const json = JSON.stringify(value)
+  localStorage.setItem(transformItem(key), json)
 }
 
-function getLocalStorage(item) {
-  return JSON.parse(localStorage.getItem(transformItem(item)))
+function getLocalStorage(key) {
+  return JSON.parse(localStorage.getItem(transformItem(key)))
 }
 
-function transformItem(item) {
-  return `${DATA_VERSION}-${item}`
+function transformItem(key) {
+  return `${DATA_VERSION}-${key}`
 }
 
 export default LocalStorage

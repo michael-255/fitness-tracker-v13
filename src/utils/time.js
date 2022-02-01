@@ -1,4 +1,9 @@
-import { MILLISECONDS } from '../constants/globals.js'
+const MILLISECONDS = Object.freeze({
+  perDay: 86400000,
+  perHour: 3600000,
+  perMinute: 60000,
+  perSecond: 1000,
+})
 
 /**
  * Returns formatted duration string from milliseconds.

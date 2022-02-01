@@ -1,5 +1,5 @@
 <script>
-import { getDurationFromMilliseconds } from '../../utils/date-time.js'
+import { getDurationFromMilliseconds } from '../../utils/time.js'
 
 export default {
   props: {

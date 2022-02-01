@@ -77,7 +77,7 @@ export const combinedStoreActions = () => {
         dispatch(`${ENTITY.activeWorkoutRecords}/setStateWithDatabase`),
       ])
     },
-    async cancelWorkout({ dispatch }) {
+    async removeActiveWorkout({ dispatch }) {
       await Promise.all([
         dispatch(`${ENTITY.activeExerciseRecords}/clearDatabase`),
         dispatch(`${ENTITY.activeWorkoutRecords}/clearDatabase`),
@@ -151,7 +151,7 @@ export const databaseActions = (defaultState, entity) => {
       LocalStorage.init(entity, defaultState[entity])
     },
     async saveStateToDatabase({ state }) {
-      LocalStorage.overwrite(entity, state[entity])
+      LocalStorage.set(entity, state[entity])
     },
     async clearDatabase() {
       LocalStorage.clear(entity, defaultState[entity])

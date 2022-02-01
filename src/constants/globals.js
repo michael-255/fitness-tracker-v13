@@ -1,24 +1,15 @@
 /**
  * Use this as a prefix for LocalStorage fields to make them unique per version.
  */
-export const DATA_VERSION = Object.freeze('FTData-v1')
-
-export const MILLISECONDS = Object.freeze({
-  perDay: 86400000,
-  perHour: 3600000,
-  perMinute: 60000,
-  perSecond: 1000,
-})
+export const DATA_VERSION = Object.freeze('fitdata-v2')
 
 export const ENTITY = Object.freeze({
   measurements: 'measurements',
   exercises: 'exercises',
   workouts: 'workouts',
-  measurementRecords: 'measurementRecords',
-  exerciseRecords: 'exerciseRecords',
-  workoutRecords: 'workoutRecords',
   activeExercises: 'activeExercises',
   activeWorkout: 'activeWorkout',
+  records: 'records',
 })
 
 const layout = 'Layout'

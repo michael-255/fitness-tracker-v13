@@ -17,9 +17,9 @@ export default {
       this.$router.push({ name: VIEW.activeWorkout })
     },
 
-    async cancelWorkout() {
+    async removeActiveWorkout() {
       if (confirm('Cancel this workout?')) {
-        await this.$store.dispatch('cancelWorkout')
+        await this.$store.dispatch('removeActiveWorkout')
       }
     },
   },
@@ -27,23 +27,36 @@ export default {
 </script>
 
 <template>
-  <v-col class="col-12">
+  <v-col class="col-12 col-sm-6 col-md-4 col-xl-3">
     <v-card>
       <v-card-title>{{ activeWorkoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
-        <v-icon small class="mr-1">start</v-icon>
-        <span>{{ activeWorkoutDate }}</span>
+        <div>
+          <v-icon small class="mr-1">start</v-icon>
+          <span>{{ activeWorkoutDate }}</span>
+        </div>
+        <div>
+          <v-icon small class="mr-1">directions_run</v-icon>
+          <span>In progress workout</span>
+        </div>
       </v-card-subtitle>
 
-      <v-btn icon absolute top right color="error" @click="cancelWorkout()">
+      <v-btn
+        icon
+        absolute
+        top
+        right
+        color="error"
+        @click="removeActiveWorkout()"
+      >
         <v-icon>delete_forever</v-icon>
       </v-btn>
 
       <v-card-actions>
         <v-container>
-          <v-btn small color="success" @click="resumeWorkout()">
-            Resume Workout
+          <v-btn block color="success" @click="resumeWorkout()">
+            Resume
           </v-btn>
         </v-container>
       </v-card-actions>
