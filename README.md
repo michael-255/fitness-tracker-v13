@@ -4,6 +4,15 @@ Fitness Tracker Web App v13
 
 ## Todo - Continue carefully refactoring the project
 
+**Priority:**
+
+- Write `create` resolver
+- Write `update` resolver
+- Write `remove` resolver
+- Write `clear` resolver
+
+**Secondary:**
+
 - Workout record summaries
 - Exercise record summaries
 - Implement Measurement recording feature
@@ -17,7 +26,3 @@ Fitness Tracker Web App v13
   - Display the current data version (`FTData-v#`)
 
 ## WIP Notes
-
-```javascript
-// FILE -----------------------------------------------------------------------
-```

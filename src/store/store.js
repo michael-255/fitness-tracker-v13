@@ -5,7 +5,7 @@ import Defaults from '../utils/defaults.js'
 import { arrayWrap, isArrayReady } from '../utils/common.js'
 import { getDurationFromMilliseconds } from '../utils/time.js'
 import { Record } from '../models/Entities.js'
-import { ENTITY } from '../constants/globals.js'
+import { ENTITY, OPERATION_TYPE } from '../constants/globals.js'
 
 Vue.use(Vuex)
 
@@ -35,7 +35,10 @@ export default new Vuex.Store({
     },
   },
 
-  // ACTIONS ------------------------------------------------------------------
+  /**
+   * ACTIONS ------------------------------------------------------------------
+   * Most of your important app functionality should be handled by actions.
+   */
   actions: {
     /**
      * Initializes local storage if needed, then sets the app state from
@@ -199,9 +202,49 @@ export default new Vuex.Store({
         data: activeExerciseRecords,
       })
     },
+
+    operationResolver({ dispatch }, operation) {
+      switch (operation.type) {
+        case OPERATION_TYPE.CreateOperation:
+          dispatch('create', operation)
+          break
+        case OPERATION_TYPE.UpdateOperation:
+          dispatch('update', operation)
+          break
+        case OPERATION_TYPE.RemoveOperation:
+          dispatch('remove', operation)
+          break
+        case OPERATION_TYPE.ClearOperation:
+          dispatch('clear', operation)
+          break
+        default:
+          console.error(`Operation type ${operation.type} is not valid`)
+          break
+      }
+    },
+
+    create({ commit }, operation) {
+      console.log(commit, operation)
+    },
+
+    update({ commit }, operation) {
+      console.log(commit, operation)
+    },
+
+    remove({ commit }, operation) {
+      console.log(commit, operation)
+    },
+
+    clear({ commit }, operation) {
+      console.log(commit, operation)
+    },
   },
 
-  // GETTERS ------------------------------------------------------------------
+  /**
+   * GETTERS ------------------------------------------------------------------
+   * Most getters are for top level state data unless it is used often.
+   * Use computed properties on the component for one off values.
+   */
   getters: {
     getState: (state) => (entity) => state[entity],
 
