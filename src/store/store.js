@@ -223,18 +223,48 @@ export default new Vuex.Store({
       }
     },
 
+    /**
+     * Create
+     * (onEntity, newData)
+     * - Confirm none of the data ids already exist at the location
+     * - Add new data to the location
+     * - Error if data already exists (same id)
+     * Note: State and Local Storage should change together!
+     */
     create({ commit }, operation) {
       console.log(commit, operation)
     },
 
+    /**
+     * Update
+     * (onEntity, thisData)
+     * - Find each matching id in location
+     * - Replace with updated data
+     * - Error if no matching data to replace found
+     * Note: State and Local Storage should change together!
+     */
     update({ commit }, operation) {
       console.log(commit, operation)
     },
 
+    /**
+     * Remove
+     * (onEntity, theseIds)
+     * - Find data at location by provided id
+     * - Remove data with matching id
+     * - Error for each id where a match isnt found
+     * Note: State and Local Storage should change together!
+     */
     remove({ commit }, operation) {
       console.log(commit, operation)
     },
 
+    /**
+     * Clear
+     * (theseEntities)
+     * - Remove state and local storage data from provided locations
+     * Note: State and Local Storage should change together!
+     */
     clear({ commit }, operation) {
       console.log(commit, operation)
     },

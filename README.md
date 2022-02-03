@@ -10,6 +10,7 @@ Fitness Tracker Web App v13
 - Write `update` resolver
 - Write `remove` resolver
 - Write `clear` resolver
+- Make some basic tests to prove the resolvers work
 
 **Secondary:**
 
