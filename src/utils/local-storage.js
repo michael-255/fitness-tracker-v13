@@ -3,7 +3,7 @@ import { DATA_VERSION } from '../constants/globals.js'
 
 const LocalStorage = {
   /**
-   * Initialize local storage by key(s) with the defined value.
+   * Initialize local storage key(s) with the default value.
    */
   initByKeys(keys, initValue = []) {
     arrayWrap(keys).forEach((key) => {
@@ -16,7 +16,7 @@ const LocalStorage = {
   },
 
   /**
-   * Clear local storage key(s) with the defined value.
+   * Clear local storage key(s) with the default value.
    */
   clearByKeys(keys, clearValue = []) {
     arrayWrap(keys).forEach((key) => setLocalStorage(key, clearValue))

@@ -7,32 +7,32 @@ class _Operation {
 }
 
 export class CreateOperation extends _Operation {
-  constructor({ onEntity = null, newData = null } = {}) {
+  constructor({ onSource = null, newEntities = null } = {}) {
     super(OPERATION_TYPE.CreateOperation)
-    this.onEntity = onEntity
-    this.newData = newData
+    this.onSource = onSource
+    this.newEntities = newEntities
   }
 }
 
 export class UpdateOperation extends _Operation {
-  constructor({ onEntity = null, thisData = null } = {}) {
+  constructor({ onSource = null, theseEntities = null } = {}) {
     super(OPERATION_TYPE.UpdateOperation)
-    this.onEntity = onEntity
-    this.thisData = thisData
+    this.onSource = onSource
+    this.theseEntities = theseEntities
   }
 }
 
 export class RemoveOperation extends _Operation {
-  constructor({ onEntity = null, theseIds = null } = {}) {
+  constructor({ onSource = null, theseIds = null } = {}) {
     super(OPERATION_TYPE.RemoveOperation)
-    this.onEntity = onEntity
+    this.onSource = onSource
     this.theseIds = theseIds
   }
 }
 
 export class ClearOperation extends _Operation {
-  constructor({ theseEntities = null } = {}) {
+  constructor({ theseSources = null } = {}) {
     super(OPERATION_TYPE.ClearOperation)
-    this.theseEntities = theseEntities
+    this.theseSources = theseSources
   }
 }

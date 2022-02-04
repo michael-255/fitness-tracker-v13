@@ -51,7 +51,7 @@ export default {
     },
 
     async routeToNewWorkout() {
-      this.$router.push({ name: VIEW.activeWorkout })
+      this.$router.push({ name: VIEW.inProgressWorkout })
       await this.$store.dispatch('beginNewWorkout', this.workout)
     },
   },

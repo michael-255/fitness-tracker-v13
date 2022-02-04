@@ -1,12 +1,12 @@
 <script>
+import InProgressExercisesContainer from '../components/view/InProgressExercisesContainer.vue'
 import { VIEW } from '../constants/globals'
-import ActiveExercisesContainer from '../components/view/ActiveExercisesContainer.vue'
 
 export default {
-  name: VIEW.activeWorkout,
+  name: VIEW.inProgressWorkout,
 
   components: {
-    ActiveExercisesContainer,
+    InProgressExercisesContainer,
   },
 
   methods: {
@@ -22,7 +22,7 @@ export default {
 
 <template>
   <v-container>
-    <ActiveExercisesContainer />
+    <InProgressExercisesContainer />
 
     <v-row class="mb-3 mt-5">
       <v-spacer />

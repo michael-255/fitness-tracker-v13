@@ -1,9 +1,9 @@
 /**
- * Use this as a prefix for LocalStorage fields to make them unique per version.
+ * Used as a prefix for Local Storage fields to make them unique.
  */
-export const DATA_VERSION = Object.freeze('fitdata-v2')
+export const DATA_VERSION = Object.freeze('fitdata-v3')
 
-// Types
+// Entity Types - For  basic type checking.
 
 export const OPERATION_TYPE = Object.freeze({
   CreateOperation: 'CreateOperation',
@@ -24,42 +24,36 @@ export const RECORD_TYPE = Object.freeze({
   WorkoutRecord: 'WorkoutRecord',
 })
 
-// Entities
+export const TYPE = Object.freeze({
+  ...OPERATION_TYPE,
+  ...ACTION_TYPE,
+  ...RECORD_TYPE,
+})
 
-export const ACTION_ENTITY = Object.freeze({
+// Entity Sources - Key names for State and Local Storage sources.
+
+export const ACTION_SOURCE = Object.freeze({
   measurements: 'measurements',
   exercises: 'exercises',
   workouts: 'workouts',
 })
 
-export const INPROGRESS_ENTITY = Object.freeze({
-  inProgressMeasurements: 'inProgressMeasurements',
-  inProgressExercises: 'inProgressExercises',
-  inProgressWorkouts: 'inProgressWorkouts',
+export const INPROGRESS_SOURCE = Object.freeze({
+  measurementsInProgress: 'measurementsInProgress',
+  exercisesInProgress: 'exercisesInProgress',
+  workoutsInProgress: 'workoutsInProgress',
 })
 
-export const RECORDS_ENTITY = Object.freeze({
+export const RECORD_SOURCE = Object.freeze({
   measurementRecords: 'measurementRecords',
   exerciseRecords: 'exerciseRecords',
   workoutRecords: 'workoutRecords',
 })
 
-export const ALL_ENTITY = Object.freeze({
-  ...ACTION_ENTITY,
-  ...INPROGRESS_ENTITY,
-  ...RECORDS_ENTITY,
-})
-
-/**
- * @deprecated
- */
-export const ENTITY = Object.freeze({
-  measurements: 'measurements',
-  exercises: 'exercises',
-  workouts: 'workouts',
-  activeExercises: 'activeExercises',
-  activeWorkout: 'activeWorkout',
-  records: 'records',
+export const SOURCE = Object.freeze({
+  ...ACTION_SOURCE,
+  ...INPROGRESS_SOURCE,
+  ...RECORD_SOURCE,
 })
 
 // UI Components
@@ -68,7 +62,7 @@ const layout = 'Layout'
 
 export const LAYOUT = Object.freeze({
   default: 'Default' + layout,
-  activeWorkout: 'ActiveWorkout' + layout,
+  inProgressWorkout: 'inProgressWorkout' + layout,
 })
 
 const view = 'View'
@@ -76,5 +70,5 @@ const view = 'View'
 export const VIEW = Object.freeze({
   notFound: 'NotFound' + view,
   dashboard: 'Dashboard' + view,
-  activeWorkout: 'ActiveWorkout' + view,
+  inProgressWorkout: 'inProgressWorkout' + view,
 })

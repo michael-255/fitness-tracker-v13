@@ -15,10 +15,10 @@ const routes = [
     component: () => import('../views/Dashboard.vue'),
   },
   {
-    path: '/active-workout',
-    name: VIEW.activeWorkout,
-    meta: { layout: LAYOUT.activeWorkout },
-    component: () => import('../views/ActiveWorkout.vue'),
+    path: '/in-progress-workout',
+    name: VIEW.inProgressWorkout,
+    meta: { layout: LAYOUT.inProgressWorkout },
+    component: () => import('../views/InProgressWorkout.vue'),
   },
   {
     path: '*', // 404

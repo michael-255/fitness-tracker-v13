@@ -4,17 +4,17 @@ import { VIEW } from '../../constants/globals.js'
 export default {
   computed: {
     activeWorkoutName() {
-      return this.$store.getters.getActiveWorkoutName
+      return this.$store.getters.getInProgressWorkoutName
     },
 
     activeWorkoutDate() {
-      return this.$store.getters.getActiveWorkoutDate
+      return this.$store.getters.getInProgressWorkoutDate
     },
   },
 
   methods: {
     resumeWorkout() {
-      this.$router.push({ name: VIEW.activeWorkout })
+      this.$router.push({ name: VIEW.inProgressWorkout })
     },
 
     async removeActiveWorkout() {

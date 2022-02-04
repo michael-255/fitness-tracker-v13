@@ -18,7 +18,7 @@ export default {
   created() {
     this.timerId = setInterval(() => {
       const now = new Date().getTime()
-      const createdAt = this.$store.getters.getActiveWorkoutCreatedAt
+      const createdAt = this.$store.getters.getInProgressWorkoutCreatedAt
       this.durationStr = getDurationFromMilliseconds(now - createdAt)
     }, 1000)
   },

@@ -1,7 +1,7 @@
 <script>
 import ResumeCard from './ResumeCard.vue'
 import WorkoutCard from './WorkoutCard.vue'
-import { ENTITY } from '../../constants/globals.js'
+import { SOURCE } from '../../constants/globals.js'
 
 export default {
   components: {
@@ -11,7 +11,7 @@ export default {
 
   computed: {
     workouts() {
-      return this.$store.getters.getState(ENTITY.workouts)
+      return this.$store.getters.getState(SOURCE.workouts)
     },
 
     renderResumeCard() {

@@ -4,7 +4,7 @@ import { VIEW } from '../../constants/globals.js'
 export default {
   computed: {
     activeWorkoutName() {
-      return this.$store.getters['getActiveWorkoutName']
+      return this.$store.getters.getInProgressWorkoutName
     },
   },
 

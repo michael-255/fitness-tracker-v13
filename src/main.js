@@ -9,7 +9,7 @@ import ActiveWorkoutLayout from './layouts/ActiveWorkout.vue'
 import { LAYOUT } from './constants/globals.js'
 
 Vue.component(LAYOUT.default, DefaultLayout)
-Vue.component(LAYOUT.activeWorkout, ActiveWorkoutLayout)
+Vue.component(LAYOUT.inProgressWorkout, ActiveWorkoutLayout)
 
 Vue.config.productionTip = false
 

@@ -1,30 +1,30 @@
 <script>
-import ActiveExerciseSet from './ActiveExerciseSet.vue'
+import InProgressExerciseSet from './InProgressExerciseSet.vue'
 
 export default {
   props: {
-    activeExercise: {
+    inProgressExercise: {
       type: Object,
       required: true,
     },
   },
 
   components: {
-    ActiveExerciseSet,
+    InProgressExerciseSet,
   },
 
   computed: {
     exerciseName() {
-      return this.activeExercise?.entityName
+      return this.inProgressExercise?.actionName
     },
 
     exerciseId() {
-      return this.activeExercise?.entityId
+      return this.inProgressExercise?.actionId
     },
 
     setCount() {
       return this.$store.getters.getExerciseSetCountById(
-        this.activeExercise?.entityId
+        this.inProgressExercise?.actionId
       )
     },
   },
@@ -62,10 +62,10 @@ export default {
               </thead>
 
               <tbody>
-                <ActiveExerciseSet
+                <InProgressExerciseSet
                   v-for="i in setCount"
                   :key="i"
-                  :activeExercise="activeExercise"
+                  :inProgressExercise="inProgressExercise"
                   :setNumber="i - 1"
                 />
               </tbody>

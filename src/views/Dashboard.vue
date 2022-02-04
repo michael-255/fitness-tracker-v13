@@ -1,7 +1,7 @@
 <script>
 import RecommendationsContainer from '../components/view/RecommendationsContainer.vue'
 import WorkoutsContainer from '../components/view/WorkoutsContainer.vue'
-import { ENTITY, VIEW } from '../constants/globals.js'
+import { SOURCE, VIEW } from '../constants/globals.js'
 
 export default {
   name: VIEW.dashboard,
@@ -13,15 +13,15 @@ export default {
 
   created() {
     // Ensures active state is up-to-date during page loads and crashes
-    this.$store.dispatch('setStateFromStorage', [
-      ENTITY.activeExercises,
-      ENTITY.activeWorkout,
+    this.$store.dispatch('setStateFromLocalStorage', [
+      SOURCE.exercisesInProgress,
+      SOURCE.workoutsInProgress,
     ])
   },
 
   computed: {
     renderWorkouts() {
-      return this.$store.getters.isStateReady(ENTITY.workouts)
+      return this.$store.getters.isStateReady(SOURCE.workouts)
     },
   },
 }

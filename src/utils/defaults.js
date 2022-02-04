@@ -1,8 +1,9 @@
 import { Measurement, Exercise, Workout } from '../models/Entities.js'
 
 /**
- * Using a few pre-generated ids so new workouts and exercises can be added
- * without breaking any record data that users may already have in the app.
+ * Using pre-generated ids so new default measurements, exercises, and workouts
+ * can be added without breaking any record data that users may already have in
+ * the app.
  */
 const DEFAULT_IDS = Object.freeze({
   measurements: [
@@ -21,6 +22,7 @@ const DEFAULT_IDS = Object.freeze({
     'cfd5e054-8234-4149-89c2-533083148fde',
     '6fd59aae-cf63-4ae0-98b9-faf28638a2a6',
     '7cff9c4b-2dcf-42be-a083-86c18120dc24',
+    // Add new measurement ids here...
   ],
   exercises: [
     '4df4eed2-91ad-4134-a700-2240429e55ab',
@@ -63,6 +65,7 @@ const DEFAULT_IDS = Object.freeze({
     '7a4352a1-3db2-43b2-8358-6813fa438c64',
     '9f701487-4e4d-4382-99ac-a143ba22b509',
     '0e2fe56f-973f-43ac-8007-d12d0554d631',
+    // Add new exercise ids here...
   ],
   workouts: [
     '8d4e4291-b87b-4756-b4ed-7cdd153f413a',
@@ -81,6 +84,7 @@ const DEFAULT_IDS = Object.freeze({
     'ab19f9db-de13-4660-87ff-da2b31a61003',
     'c54238ff-bd1b-4f7a-96f3-b9a54d00a9da',
     '206e2459-8538-4509-84cb-c837723a1439',
+    // Add new workout ids here...
   ],
 })
 
@@ -147,6 +151,7 @@ const Defaults = {
         id: DEFAULT_IDS.measurements[13],
         name: 'Right Calves',
       }),
+      // Add new Measurements here...
     ]
   },
 
@@ -179,8 +184,9 @@ const Defaults = {
       new Exercise({
         id: DEFAULT_IDS.exercises[4],
         name: 'Deadlift',
-        inputs: { setCount: 5 },
+        inputs: { setCount: 1 },
       }),
+      // Add new Exercises here...
     ]
   },
 
@@ -214,6 +220,7 @@ const Defaults = {
           getExerciseIdByName('Deadlift'),
         ],
       }),
+      // Add new Workouts here...
     ]
   },
 }

@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    activeExercise: {
+    inProgressExercise: {
       type: Object,
       required: true,
     },
@@ -20,7 +20,7 @@ export default {
 
   computed: {
     exerciseId() {
-      return this.activeExercise?.entityId
+      return this.inProgressExercise?.actionId
     },
 
     previousWeight() {
@@ -38,14 +38,14 @@ export default {
 
   methods: {
     saveChanges() {
-      const updatedRecord = this.activeExercise
+      const updatedRecord = this.inProgressExercise
 
       updatedRecord.data.sets[this.setNumber] = {
         weight: this.weight,
         reps: this.reps,
       }
 
-      this.$store.dispatch('updateActiveExercises', updatedRecord)
+      this.$store.dispatch('updateInProgressExercises', updatedRecord)
     },
   },
 }
