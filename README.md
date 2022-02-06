@@ -6,11 +6,12 @@ Fitness Tracker Web App v13
 
 **Priority:**
 
-- Write `create` resolver
+- ~~Write `create` resolver~~
 - Write `update` resolver
 - Write `remove` resolver
 - Write `clear` resolver
-- Make some basic tests to prove the resolvers work
+- Make some basic tests to prove the resolvers work (WIP)
+- Something is wrong with previous records code. May just refactor completely?
 
 **Secondary:**
 

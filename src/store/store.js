@@ -29,6 +29,11 @@ export default new Vuex.Store({
   state: defaultState(),
 
   mutations: {
+    /**
+     * Generic state mutation
+     * @param {object} payload.source SOURCE constant
+     * @param {object} payload.data Entities data
+     */
     SET_STATE(state, payload) {
       const { source, data } = payload
       state[source] = data
@@ -233,26 +238,55 @@ export default new Vuex.Store({
     },
 
     /**
-     * Create
-     * (onSource, newEntities)
-     * - Confirm none of the data ids already exist at the location
-     * - Add new data to the location
-     * - Error if data already exists (same id)
-     * Note: State and Local Storage should change together!
+     * Create operation for source (State and Local Storage)
+     * @param {object} operation.onSource SOURCE constant
+     * @param {object} operation.newEntities Entities to add
      */
-    create({ commit }, operation) {
-      console.log(commit, operation)
+    create({ commit, state }, operation) {
+      const { onSource, newEntities } = operation
+      const sourceIds = state[onSource].map((s) => s.id)
+      let additions = []
+      let duplicates = []
+
+      newEntities.forEach((ne) => {
+        if (sourceIds.includes(ne.id)) {
+          duplicates.push(ne)
+        } else {
+          additions.push(ne)
+        }
+      })
+
+      if (duplicates.length) {
+        console.error(
+          `Duplicate id(s) found on source ${onSource} for:`,
+          duplicates
+        )
+      }
+
+      if (!additions.length) {
+        console.error(`No additions found for ${onSource} source`)
+      } else {
+        console.log(`Additions for ${onSource} source:`, additions)
+
+        const resultData = [...state[onSource], ...additions]
+
+        commit('SET_STATE', {
+          source: onSource,
+          data: resultData,
+        })
+        LocalStorage.set(onSource, resultData)
+      }
     },
 
     /**
-     * Update
-     * (onSource, theseEntities)
-     * - Find each matching id in location
-     * - Replace with updated data
-     * - Error if no matching data to replace found
-     * Note: State and Local Storage should change together!
+     * Update operation for source (State and Local Storage)
+     * @param {object} operation.onSource SOURCE constant
+     * @param {object} operation.theseEntities Entities to update with
      */
     update({ commit }, operation) {
+      // - Find each matching id in location
+      // - Replace with updated data
+      // - Error if no matching data to replace found
       console.log(commit, operation)
     },
 
@@ -264,17 +298,25 @@ export default new Vuex.Store({
      * - Error for each id where a match isnt found
      * Note: State and Local Storage should change together!
      */
+
+    /**
+     * Remove operation for source (State and Local Storage)
+     * @param {object} operation.onSource SOURCE constant
+     * @param {object} operation.theseIds Ids of entities to remove
+     */
     remove({ commit }, operation) {
+      // - Find data at location by provided id
+      // - Remove data with matching id
+      // - Error for each id where a match isnt found
       console.log(commit, operation)
     },
 
     /**
-     * Clear
-     * (theseSources)
-     * - Remove state and local storage data from provided locations
-     * Note: State and Local Storage should change together!
+     * Clear operation for source (State and Local Storage)
+     * @param {object} operation.theseSources SOURCE constants to clear
      */
     clear({ commit }, operation) {
+      // - Clear the state and local storage of the provided sources
       console.log(commit, operation)
     },
   },
