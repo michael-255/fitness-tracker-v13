@@ -17,9 +17,9 @@ export default {
       this.$router.push({ name: VIEW.inProgressWorkout })
     },
 
-    async removeActiveWorkout() {
+    async clearInProgressWorkout() {
       if (confirm('Cancel this workout?')) {
-        await this.$store.dispatch('removeActiveWorkout')
+        await this.$store.dispatch('clearInProgressWorkout')
       }
     },
   },
@@ -48,7 +48,7 @@ export default {
         top
         right
         color="error"
-        @click="removeActiveWorkout()"
+        @click="clearInProgressWorkout()"
       >
         <v-icon>delete_forever</v-icon>
       </v-btn>

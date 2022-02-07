@@ -6,6 +6,12 @@ import { arrayWrap, isArrayReady } from '../utils/common.js'
 import { getDurationFromMilliseconds } from '../utils/time.js'
 import { ExerciseRecord, WorkoutRecord } from '../models/Entities.js'
 import { SOURCE, OPERATION_TYPE } from '../constants/globals.js'
+import {
+  InitOperation,
+  ClearOperation,
+  CreateOperation,
+  UpdateOperation,
+} from '../models/Operations.js'
 
 Vue.use(Vuex)
 
@@ -52,53 +58,47 @@ export default new Vuex.Store({
      * Init local storage if needed, then retrieve any data for the app state.
      */
     startApp({ dispatch }) {
-      const sources = Object.keys(SOURCE)
-      LocalStorage.initByKeys(sources)
-      dispatch('setStateFromLocalStorage', sources)
+      dispatch(
+        'operationResolver',
+        new InitOperation({ theseSources: Object.keys(SOURCE) })
+      )
     },
 
     /**
      * Removes all state and local storage data from the app (even records).
      */
-    clearAppData({ commit }) {
-      LocalStorage.clearByKeys(Object.keys(SOURCE))
-      commit('CLEAR_STATE')
+    clearAppData({ dispatch }) {
+      dispatch(
+        'operationResolver',
+        new ClearOperation({ theseSources: Object.keys(SOURCE) })
+      )
     },
 
     /**
      * Loads default measurements, exercises, and workouts into the app.
      */
-    setDefaultAppData({ commit }) {
-      const measurements = Defaults.getMeasurements()
-      const exercises = Defaults.getExercises()
-      const workouts = Defaults.getWorkouts()
-
-      commit('SET_STATE', {
-        source: SOURCE.measurements,
-        data: measurements,
-      })
-      LocalStorage.set(SOURCE.measurements, measurements)
-
-      commit('SET_STATE', {
-        source: SOURCE.exercises,
-        data: exercises,
-      })
-      LocalStorage.set(SOURCE.exercises, exercises)
-
-      commit('SET_STATE', {
-        source: SOURCE.workouts,
-        data: workouts,
-      })
-      LocalStorage.set(SOURCE.workouts, workouts)
-    },
-
-    /**
-     * Sets state using data from local storage.
-     */
-    setStateFromLocalStorage({ commit }, sources) {
-      arrayWrap(sources).map((source) => {
-        commit('SET_STATE', { source, data: LocalStorage.get(source) })
-      })
+    setDefaultAppData({ dispatch }) {
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.measurements,
+          newEntities: Defaults.getMeasurements(),
+        })
+      )
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.exercises,
+          newEntities: Defaults.getExercises(),
+        })
+      )
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.workouts,
+          newEntities: Defaults.getWorkouts(),
+        })
+      )
     },
 
     beginNewWorkout({ dispatch }, workout) {
@@ -107,15 +107,16 @@ export default new Vuex.Store({
       dispatch('createInProgressWorkout', id)
     },
 
-    createInProgressExercises({ commit, getters }, exerciseIds) {
+    createInProgressExercises({ dispatch, getters }, exerciseIds) {
       const newInProgressExercises = exerciseIds.map((exerciseId) => {
         const exercise = getters.getExerciseById(exerciseId)
+        const setCount = exercise.inputs.setCount
 
         return new ExerciseRecord({
           actionId: exercise.id,
           actionName: exercise.name,
           data: {
-            sets: new Array(exercise.inputs.setCount).fill({
+            sets: new Array(setCount).fill({
               weight: null,
               reps: null,
             }),
@@ -123,14 +124,16 @@ export default new Vuex.Store({
         })
       })
 
-      commit('SET_STATE', {
-        source: SOURCE.exercisesInProgress,
-        data: newInProgressExercises,
-      })
-      LocalStorage.set(SOURCE.exercisesInProgress, newInProgressExercises)
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.exercisesInProgress,
+          newEntities: newInProgressExercises,
+        })
+      )
     },
 
-    createInProgressWorkout({ commit, getters }, workoutId) {
+    createInProgressWorkout({ dispatch, getters }, workoutId) {
       const workout = getters.getWorkoutById(workoutId)
 
       const newInProgressWorkout = new Array(
@@ -140,14 +143,16 @@ export default new Vuex.Store({
         })
       )
 
-      commit('SET_STATE', {
-        source: SOURCE.workoutsInProgress,
-        data: newInProgressWorkout,
-      })
-      LocalStorage.set(SOURCE.workoutsInProgress, newInProgressWorkout)
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.workoutsInProgress,
+          newEntities: newInProgressWorkout,
+        })
+      )
     },
 
-    finishWorkout({ commit, dispatch, state }) {
+    async finishWorkout({ dispatch, state }) {
       const inProgressExercises = state[SOURCE.exercisesInProgress]
       const inProgressWorkouts = state[SOURCE.workoutsInProgress]
 
@@ -156,69 +161,77 @@ export default new Vuex.Store({
       inProgressWorkouts[0].endedAt = endedAt
       inProgressWorkouts[0].duration = getDurationFromMilliseconds(durationMS)
 
-      const newExerciseRecords = [
-        ...state[SOURCE.exerciseRecords],
-        ...inProgressExercises,
-      ]
-
-      const newWorkoutRecords = [
-        ...state[SOURCE.workoutRecords],
-        ...inProgressWorkouts,
-      ]
-
-      commit('SET_STATE', {
-        source: SOURCE.exerciseRecords,
-        data: newExerciseRecords,
-      })
-      LocalStorage.set(SOURCE.exerciseRecords, newExerciseRecords)
-
-      commit('SET_STATE', {
-        source: SOURCE.workoutRecords,
-        data: newWorkoutRecords,
-      })
-      LocalStorage.set(SOURCE.workoutRecords, newWorkoutRecords)
-
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.exerciseRecords,
+          newEntities: inProgressExercises,
+        })
+      )
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.workoutRecords,
+          newEntities: inProgressWorkouts,
+        })
+      )
       dispatch('clearInProgressWorkout')
     },
 
-    clearInProgressWorkout({ commit }) {
-      LocalStorage.clearByKeys([
-        SOURCE.exercisesInProgress,
-        SOURCE.workoutsInProgress,
-      ])
-      commit('SET_STATE', {
-        source: SOURCE.exercisesInProgress,
-        data: [],
-      })
-      commit('SET_STATE', {
-        source: SOURCE.workoutsInProgress,
-        data: [],
-      })
+    clearInProgressWorkout({ dispatch }) {
+      dispatch(
+        'operationResolver',
+        new ClearOperation({
+          theseSources: [SOURCE.exercisesInProgress, SOURCE.workoutsInProgress],
+        })
+      )
     },
 
-    updateInProgressExercises({ commit, getters }, updatedRecord) {
-      const inProgressExercises = getters.getState(SOURCE.exercisesInProgress)
+    updateInProgressExercises({ dispatch }, updatedRecord) {
+      // const inProgressExercises = getters.getState(SOURCE.exercisesInProgress)
 
-      arrayWrap(updatedRecord).forEach((ur) => {
-        const index = inProgressExercises.findIndex(
-          (i) => i.exerciseId === ur.exerciseId
-        )
+      dispatch(
+        'operationResolver',
+        new UpdateOperation({
+          onSource: SOURCE.exercisesInProgress,
+          theseEntities: updatedRecord,
+        })
+      )
 
-        if (index === -1) {
-          inProgressExercises.push(ur)
-        } else {
-          inProgressExercises[index] = ur
-        }
-      })
+      /**
+       * @todo May need this code to maintain entity positions in the source!
+       */
+      // arrayWrap(updatedRecord).forEach((ur) => {
+      //   const index = inProgressExercises.findIndex(
+      //     (i) => i.exerciseId === ur.exerciseId
+      //   )
 
-      commit('SET_STATE', {
-        source: SOURCE.exercisesInProgress,
-        data: inProgressExercises,
-      })
+      //   if (index === -1) {
+      //     inProgressExercises.push(ur)
+      //   } else {
+      //     inProgressExercises[index] = ur
+      //   }
+      // })
+
+      // commit('SET_STATE', {
+      //   source: SOURCE.exercisesInProgress,
+      //   data: inProgressExercises,
+      // })
     },
 
+    /**
+     * OPERATION RESOLVER:
+     * Pass operations into this action to have them completed on the
+     * appropriate State and Local Storage sources.
+     */
     operationResolver({ dispatch }, operation) {
       switch (operation.type) {
+        case OPERATION_TYPE.InitOperation:
+          dispatch('init', operation)
+          break
+        case OPERATION_TYPE.ReadOperation:
+          dispatch('read', operation)
+          break
         case OPERATION_TYPE.CreateOperation:
           dispatch('create', operation)
           break
@@ -238,86 +251,213 @@ export default new Vuex.Store({
     },
 
     /**
-     * Create operation for source (State and Local Storage)
+     * INIT:
+     * Local storage gets initialized with the correct default keys and values
+     * on the provided sources if it is missing them. Then it loads any local
+     * storage data that is present into the state.
+     * @param {object} operation.theseSources SOURCE constants to initialize
+     */
+    init({ commit }, operation) {
+      try {
+        let { theseSources } = operation
+        theseSources = arrayWrap(theseSources)
+
+        LocalStorage.initByKeys(theseSources)
+
+        theseSources.map((source) => {
+          commit('SET_STATE', { source, data: LocalStorage.get(source) })
+        })
+
+        if (!theseSources.length) {
+          console.error('No sources provided for init operation')
+        }
+      } catch (error) {
+        console.error('Init operation failed:', error)
+      }
+    },
+
+    /**
+     * READ:
+     * Loads data from the provided sources into the app state.
+     * @param {object} operation.theseSources SOURCE constants to read from
+     */
+    read({ commit }, operation) {
+      try {
+        let { theseSources } = operation
+        theseSources = arrayWrap(theseSources)
+
+        theseSources.map((source) => {
+          commit('SET_STATE', { source, data: LocalStorage.get(source) })
+        })
+
+        if (!theseSources.length) {
+          console.error('No sources provided for read operation')
+        }
+      } catch (error) {
+        console.error('Read operation failed:', error)
+      }
+    },
+
+    /**
+     * CREATE:
+     * Adds new entities to the provided source.
      * @param {object} operation.onSource SOURCE constant
      * @param {object} operation.newEntities Entities to add
      */
     create({ commit, state }, operation) {
-      const { onSource, newEntities } = operation
-      const sourceIds = state[onSource].map((s) => s.id)
-      let additions = []
-      let duplicates = []
+      try {
+        const { onSource, newEntities } = operation
+        const createdEntities = arrayWrap(newEntities)
+        const sourceIds = state[onSource].map((s) => s.id)
+        let additions = []
+        let duplicates = []
 
-      newEntities.forEach((ne) => {
-        if (sourceIds.includes(ne.id)) {
-          duplicates.push(ne)
-        } else {
-          additions.push(ne)
-        }
-      })
-
-      if (duplicates.length) {
-        console.error(
-          `Duplicate id(s) found on source ${onSource} for:`,
-          duplicates
-        )
-      }
-
-      if (!additions.length) {
-        console.error(`No additions found for ${onSource} source`)
-      } else {
-        console.log(`Additions for ${onSource} source:`, additions)
-
-        const resultData = [...state[onSource], ...additions]
-
-        commit('SET_STATE', {
-          source: onSource,
-          data: resultData,
+        createdEntities.forEach((createdEntity) => {
+          if (sourceIds.includes(createdEntity.id)) {
+            duplicates.push(createdEntity)
+          } else {
+            additions.push(createdEntity)
+          }
         })
-        LocalStorage.set(onSource, resultData)
+
+        if (duplicates.length) {
+          console.error(`Duplicate(s) found on source ${onSource}:`, duplicates)
+        }
+
+        if (!additions.length) {
+          console.error(`No additions found on source ${onSource}`)
+        } else {
+          console.log(`Addition(s) for source ${onSource}:`, additions)
+
+          const resultData = [...state[onSource], ...additions]
+
+          commit('SET_STATE', {
+            source: onSource,
+            data: resultData,
+          })
+          LocalStorage.set(onSource, resultData)
+        }
+      } catch (error) {
+        console.error('Create operation failed:', error)
       }
     },
 
     /**
-     * Update operation for source (State and Local Storage)
+     * UPDATE:
+     * Replaces the entities in state and local storage with the updated
+     * version you provide.
      * @param {object} operation.onSource SOURCE constant
      * @param {object} operation.theseEntities Entities to update with
      */
-    update({ commit }, operation) {
-      // - Find each matching id in location
-      // - Replace with updated data
-      // - Error if no matching data to replace found
-      console.log(commit, operation)
+    update({ commit, state }, operation) {
+      try {
+        const { onSource, theseEntities } = operation
+        const updatedEntities = arrayWrap(theseEntities)
+        const sourceIds = state[onSource].map((s) => s.id)
+        const updatedIds = updatedEntities.map((s) => s.id)
+        let update = []
+        let noMatch = []
+        let retain = []
+
+        updatedEntities.forEach((updatedEntity) => {
+          if (sourceIds.includes(updatedEntity.id)) {
+            update.push(updatedEntity)
+          } else {
+            noMatch.push(updatedEntity)
+          }
+        })
+
+        state[onSource].forEach((entity) => {
+          if (!updatedIds.includes(entity.id)) {
+            retain.push(entity)
+          }
+        })
+
+        if (noMatch.length) {
+          console.error(`No matches found on source ${onSource} for:`, noMatch)
+        }
+
+        if (update.length) {
+          console.log(`Updating entities on source ${onSource}:`, update)
+          console.log(`Retaining entities on source ${onSource}:`, retain)
+
+          const resultData = [...retain, ...update]
+
+          commit('SET_STATE', {
+            source: onSource,
+            data: resultData,
+          })
+          LocalStorage.set(onSource, resultData)
+        }
+      } catch (error) {
+        console.error('Update operation failed:', error)
+      }
     },
 
     /**
-     * Remove
-     * (onSource, theseIds)
-     * - Find data at location by provided id
-     * - Remove data with matching id
-     * - Error for each id where a match isnt found
-     * Note: State and Local Storage should change together!
-     */
-
-    /**
-     * Remove operation for source (State and Local Storage)
+     * REMOVE:
+     * Removes entities from state and local storage by the ids provided.
      * @param {object} operation.onSource SOURCE constant
      * @param {object} operation.theseIds Ids of entities to remove
      */
-    remove({ commit }, operation) {
-      // - Find data at location by provided id
-      // - Remove data with matching id
-      // - Error for each id where a match isnt found
-      console.log(commit, operation)
+    remove({ commit, state }, operation) {
+      try {
+        const { onSource, theseIds } = operation
+        const removalIds = arrayWrap(theseIds)
+        let remove = []
+        let retain = []
+
+        state[onSource].forEach((entity) => {
+          if (removalIds.includes(entity.id)) {
+            remove.push(entity)
+          } else {
+            retain.push(entity)
+          }
+        })
+
+        if (!retain.length) {
+          console.error(`No retain(s) found on source ${onSource}`)
+        }
+
+        if (!remove.length) {
+          console.error(`No remove(s) found on source ${onSource}`)
+        } else {
+          console.log(`Remove(s) for source ${onSource}:`, remove)
+
+          commit('SET_STATE', {
+            source: onSource,
+            data: retain,
+          })
+          LocalStorage.set(onSource, retain)
+        }
+      } catch (error) {
+        console.error('Remove operation failed:', error)
+      }
     },
 
     /**
-     * Clear operation for source (State and Local Storage)
+     * CLEAR:
+     * Clears all state and local storage data to it's default values for the
+     * provided sources.
      * @param {object} operation.theseSources SOURCE constants to clear
      */
     clear({ commit }, operation) {
-      // - Clear the state and local storage of the provided sources
-      console.log(commit, operation)
+      try {
+        let { theseSources } = operation
+        theseSources = arrayWrap(theseSources)
+
+        theseSources.map((source) => {
+          commit('SET_STATE', { source, data: [] })
+        })
+
+        LocalStorage.clearByKeys(theseSources)
+
+        if (!theseSources.length) {
+          console.error('No sources provided for clear operation')
+        }
+      } catch (error) {
+        console.error('Clear operation failed:', error)
+      }
     },
   },
 

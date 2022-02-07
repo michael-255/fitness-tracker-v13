@@ -6,6 +6,8 @@ export const DATA_VERSION = Object.freeze('fitdata-v3')
 // Entity Types - For  basic type checking.
 
 export const OPERATION_TYPE = Object.freeze({
+  InitOperation: 'InitOperation',
+  ReadOperation: 'ReadOperation',
   CreateOperation: 'CreateOperation',
   UpdateOperation: 'UpdateOperation',
   RemoveOperation: 'RemoveOperation',

@@ -6,6 +6,20 @@ class _Operation {
   }
 }
 
+export class InitOperation extends _Operation {
+  constructor({ theseSources = null } = {}) {
+    super(OPERATION_TYPE.InitOperation)
+    this.theseSources = theseSources
+  }
+}
+
+export class ReadOperation extends _Operation {
+  constructor({ theseSources = null } = {}) {
+    super(OPERATION_TYPE.ReadOperation)
+    this.theseSources = theseSources
+  }
+}
+
 export class CreateOperation extends _Operation {
   constructor({ onSource = null, newEntities = null } = {}) {
     super(OPERATION_TYPE.CreateOperation)
