@@ -187,36 +187,14 @@ export default new Vuex.Store({
       )
     },
 
-    updateInProgressExercises({ dispatch }, updatedRecord) {
-      // const inProgressExercises = getters.getState(SOURCE.exercisesInProgress)
-
+    updateInProgressExercises({ dispatch }, updatedRecords) {
       dispatch(
         'operationResolver',
         new UpdateOperation({
           onSource: SOURCE.exercisesInProgress,
-          theseEntities: updatedRecord,
+          theseEntities: updatedRecords,
         })
       )
-
-      /**
-       * @todo May need this code to maintain entity positions in the source!
-       */
-      // arrayWrap(updatedRecord).forEach((ur) => {
-      //   const index = inProgressExercises.findIndex(
-      //     (i) => i.exerciseId === ur.exerciseId
-      //   )
-
-      //   if (index === -1) {
-      //     inProgressExercises.push(ur)
-      //   } else {
-      //     inProgressExercises[index] = ur
-      //   }
-      // })
-
-      // commit('SET_STATE', {
-      //   source: SOURCE.exercisesInProgress,
-      //   data: inProgressExercises,
-      // })
     },
 
     /**
@@ -229,8 +207,8 @@ export default new Vuex.Store({
         case OPERATION_TYPE.InitOperation:
           dispatch('init', operation)
           break
-        case OPERATION_TYPE.ReadOperation:
-          dispatch('read', operation)
+        case OPERATION_TYPE.LoadOperation:
+          dispatch('load', operation)
           break
         case OPERATION_TYPE.CreateOperation:
           dispatch('create', operation)
@@ -277,11 +255,11 @@ export default new Vuex.Store({
     },
 
     /**
-     * READ:
+     * LOAD:
      * Loads data from the provided sources into the app state.
-     * @param {object} operation.theseSources SOURCE constants to read from
+     * @param {object} operation.theseSources SOURCE constants to load from
      */
-    read({ commit }, operation) {
+    load({ commit }, operation) {
       try {
         let { theseSources } = operation
         theseSources = arrayWrap(theseSources)
@@ -291,10 +269,10 @@ export default new Vuex.Store({
         })
 
         if (!theseSources.length) {
-          console.error('No sources provided for read operation')
+          console.error('No sources provided for load operation')
         }
       } catch (error) {
-        console.error('Read operation failed:', error)
+        console.error('Load operation failed:', error)
       }
     },
 
@@ -307,16 +285,18 @@ export default new Vuex.Store({
     create({ commit, state }, operation) {
       try {
         const { onSource, newEntities } = operation
-        const createdEntities = arrayWrap(newEntities)
+        const createEntities = arrayWrap(newEntities)
         const sourceIds = state[onSource].map((s) => s.id)
+        let sourceEntities = state[onSource]
         let additions = []
         let duplicates = []
 
-        createdEntities.forEach((createdEntity) => {
-          if (sourceIds.includes(createdEntity.id)) {
-            duplicates.push(createdEntity)
+        createEntities.forEach((createEntity) => {
+          if (sourceIds.includes(createEntity.id)) {
+            duplicates.push(createEntity)
           } else {
-            additions.push(createdEntity)
+            sourceEntities.push(createEntity)
+            additions.push(createEntity)
           }
         })
 
@@ -329,13 +309,11 @@ export default new Vuex.Store({
         } else {
           console.log(`Addition(s) for source ${onSource}:`, additions)
 
-          const resultData = [...state[onSource], ...additions]
-
           commit('SET_STATE', {
             source: onSource,
-            data: resultData,
+            data: sourceEntities,
           })
-          LocalStorage.set(onSource, resultData)
+          LocalStorage.set(onSource, sourceEntities)
         }
       } catch (error) {
         console.error('Create operation failed:', error)
@@ -353,23 +331,20 @@ export default new Vuex.Store({
       try {
         const { onSource, theseEntities } = operation
         const updatedEntities = arrayWrap(theseEntities)
-        const sourceIds = state[onSource].map((s) => s.id)
-        const updatedIds = updatedEntities.map((s) => s.id)
-        let update = []
+        let sourceEntities = state[onSource]
         let noMatch = []
-        let retain = []
+        let update = []
 
         updatedEntities.forEach((updatedEntity) => {
-          if (sourceIds.includes(updatedEntity.id)) {
-            update.push(updatedEntity)
-          } else {
-            noMatch.push(updatedEntity)
-          }
-        })
+          const index = sourceEntities.findIndex(
+            (sourceEntity) => sourceEntity.id === updatedEntity.id
+          )
 
-        state[onSource].forEach((entity) => {
-          if (!updatedIds.includes(entity.id)) {
-            retain.push(entity)
+          if (index === -1) {
+            noMatch.push(updatedEntity)
+          } else {
+            sourceEntities[index] = updatedEntity
+            update.push(updatedEntity)
           }
         })
 
@@ -379,15 +354,12 @@ export default new Vuex.Store({
 
         if (update.length) {
           console.log(`Updating entities on source ${onSource}:`, update)
-          console.log(`Retaining entities on source ${onSource}:`, retain)
-
-          const resultData = [...retain, ...update]
 
           commit('SET_STATE', {
             source: onSource,
-            data: resultData,
+            data: sourceEntities,
           })
-          LocalStorage.set(onSource, resultData)
+          LocalStorage.set(onSource, sourceEntities)
         }
       } catch (error) {
         console.error('Update operation failed:', error)
@@ -404,19 +376,24 @@ export default new Vuex.Store({
       try {
         const { onSource, theseIds } = operation
         const removalIds = arrayWrap(theseIds)
+        let sourceEntities = state[onSource]
         let remove = []
-        let retain = []
+        let noMatch = []
 
-        state[onSource].forEach((entity) => {
-          if (removalIds.includes(entity.id)) {
-            remove.push(entity)
+        removalIds.forEach((removeId) => {
+          const index = sourceEntities.findIndex(
+            (sourceEntity) => sourceEntity.id === removeId
+          )
+
+          if (index === -1) {
+            noMatch.push(removeId)
           } else {
-            retain.push(entity)
+            remove.push(sourceEntities.splice(index, 1))
           }
         })
 
-        if (!retain.length) {
-          console.error(`No retain(s) found on source ${onSource}`)
+        if (noMatch.length) {
+          console.error(`No matches found on source ${onSource} for:`, noMatch)
         }
 
         if (!remove.length) {
@@ -426,9 +403,9 @@ export default new Vuex.Store({
 
           commit('SET_STATE', {
             source: onSource,
-            data: retain,
+            data: sourceEntities,
           })
-          LocalStorage.set(onSource, retain)
+          LocalStorage.set(onSource, sourceEntities)
         }
       } catch (error) {
         console.error('Remove operation failed:', error)
@@ -516,7 +493,7 @@ export default new Vuex.Store({
     getInProgressWorkout: (state) => state[SOURCE.workoutsInProgress][0], // Should only be one
 
     getInProgressWorkoutName: (_, getters) => {
-      return getters.getInProgressWorkout?.workoutName ?? 'No name found'
+      return getters.getInProgressWorkout?.actionName ?? 'No name found'
     },
 
     getInProgressWorkoutDate: (_, getters) => {

@@ -13,9 +13,9 @@ export class InitOperation extends _Operation {
   }
 }
 
-export class ReadOperation extends _Operation {
+export class LoadOperation extends _Operation {
   constructor({ theseSources = null } = {}) {
-    super(OPERATION_TYPE.ReadOperation)
+    super(OPERATION_TYPE.LoadOperation)
     this.theseSources = theseSources
   }
 }

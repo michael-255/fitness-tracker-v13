@@ -2,7 +2,7 @@
 import RecommendationsContainer from '../components/view/RecommendationsContainer.vue'
 import WorkoutsContainer from '../components/view/WorkoutsContainer.vue'
 import { SOURCE, VIEW } from '../constants/globals.js'
-import { ReadOperation } from '../models/Operations.js'
+import { LoadOperation } from '../models/Operations.js'
 
 export default {
   name: VIEW.dashboard,
@@ -16,7 +16,7 @@ export default {
     // Ensures in progress state is up-to-date during page loads and crashes
     this.$store.dispatch(
       'operationResolver',
-      new ReadOperation({
+      new LoadOperation({
         theseSources: [
           SOURCE.measurementsInProgress,
           SOURCE.exercisesInProgress,

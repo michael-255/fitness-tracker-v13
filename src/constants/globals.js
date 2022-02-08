@@ -7,7 +7,7 @@ export const DATA_VERSION = Object.freeze('fitdata-v3')
 
 export const OPERATION_TYPE = Object.freeze({
   InitOperation: 'InitOperation',
-  ReadOperation: 'ReadOperation',
+  LoadOperation: 'LoadOperation',
   CreateOperation: 'CreateOperation',
   UpdateOperation: 'UpdateOperation',
   RemoveOperation: 'RemoveOperation',

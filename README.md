@@ -6,9 +6,6 @@ Fitness Tracker Web App v13
 
 **Priority:**
 
-- Update resolver needs to maintain the entities index position
-  - This ensures the order in app isn't changed
-  - May need to do the same to Create and Remove???
 - Something is wrong with previous records code. May just refactor completely?
 
 **Secondary:**
