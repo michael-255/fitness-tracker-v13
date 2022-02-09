@@ -9,6 +9,15 @@ export default {
     },
   },
 
+  data() {
+    return {
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
+    }
+  },
+
   components: {
     InProgressExerciseSet,
   },
@@ -36,9 +45,40 @@ export default {
     <v-card>
       <v-card-title>
         <span>{{ exerciseName }}</span>
-        <v-btn icon absolute top right>
-          <v-icon>list_alt</v-icon>
+        <v-btn icon absolute top right @click="viewRecords()">
+          <v-icon>assignment</v-icon>
         </v-btn>
+        <!-- TEST DIALOG -->
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon absolute top right v-bind="attrs" v-on="on">
+                <v-icon>assignment</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-toolbar-title>Previous Records</v-toolbar-title>
+                <v-spacer />
+                <v-toolbar-items>
+                  <v-btn icon @click="dialog = false">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <div>
+                Hello World!
+              </div>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <!-- TEST DIALOG -->
       </v-card-title>
 
       <v-card-text>

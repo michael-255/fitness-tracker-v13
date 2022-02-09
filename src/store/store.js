@@ -101,8 +101,9 @@ export default new Vuex.Store({
       )
     },
 
-    beginNewWorkout({ dispatch }, workout) {
+    async beginNewWorkout({ dispatch }, workout) {
       const { id, exerciseIds } = workout
+      await dispatch('clearInProgressWorkout')
       dispatch('createInProgressExercises', exerciseIds)
       dispatch('createInProgressWorkout', id)
     },
@@ -117,8 +118,8 @@ export default new Vuex.Store({
           actionName: exercise.name,
           data: {
             sets: new Array(setCount).fill({
-              weight: null,
-              reps: null,
+              weight: '',
+              reps: '',
             }),
           },
         })
@@ -178,8 +179,8 @@ export default new Vuex.Store({
       dispatch('clearInProgressWorkout')
     },
 
-    clearInProgressWorkout({ dispatch }) {
-      dispatch(
+    async clearInProgressWorkout({ dispatch }) {
+      await dispatch(
         'operationResolver',
         new ClearOperation({
           theseSources: [SOURCE.exercisesInProgress, SOURCE.workoutsInProgress],
@@ -203,6 +204,8 @@ export default new Vuex.Store({
      * appropriate State and Local Storage sources.
      */
     operationResolver({ dispatch }, operation) {
+      console.log('Resolver Operation:', operation)
+
       switch (operation.type) {
         case OPERATION_TYPE.InitOperation:
           dispatch('init', operation)
@@ -223,7 +226,7 @@ export default new Vuex.Store({
           dispatch('clear', operation)
           break
         default:
-          console.error(`Operation type ${operation.type} is not valid`)
+          console.error(`Operation ${operation} type is invalid`)
           break
       }
     },
@@ -431,6 +434,8 @@ export default new Vuex.Store({
 
         if (!theseSources.length) {
           console.error('No sources provided for clear operation')
+        } else {
+          console.log('Clearing these sources:', theseSources)
         }
       } catch (error) {
         console.error('Clear operation failed:', error)
@@ -524,7 +529,7 @@ export default new Vuex.Store({
         SOURCE.exerciseRecords,
         exerciseId
       )
-      return previousRecord?.data?.sets?.[setNumber]?.weight ?? 0
+      return previousRecord?.data?.sets?.[setNumber]?.weight ?? ''
     },
 
     getPreviousExerciseRepsBySetAndId: (_, getters) => (
@@ -535,7 +540,7 @@ export default new Vuex.Store({
         SOURCE.exerciseRecords,
         exerciseId
       )
-      return previousRecord?.data?.sets?.[setNumber]?.reps ?? 0
+      return previousRecord?.data?.sets?.[setNumber]?.reps ?? ''
     },
 
     getPreviousWorkoutDateById: (_, getters) => (workoutId) => {
