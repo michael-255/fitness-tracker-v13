@@ -1,12 +1,12 @@
 {
-  "name": "Fitness Linear Progression",
+  "name": "Fitness Tracker",
   "short_name": "Fit LP",
-  "description": "Fitness Linear Progression helps you reach your fitness goals one step at a time.",
+  "description": "Fitness Tracker helps you reach your fitness goals one step at a time.",
   "catagories": ["fitness", "health", "lifestyle", "sports"],
-  "background_color": "#317EFB",
-  "theme_color": "#317EFB",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "display": "standalone",
-  "start_url": "/vue-fitness-progression",
+  "start_url": "/fitness-tracker-v13",
   "orientation": "any",
   "icons": [
     {
