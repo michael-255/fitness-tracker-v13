@@ -558,5 +558,16 @@ export default new Vuex.Store({
       )
       return previousRecord?.duration ?? '-'
     },
+
+    getAllPreviousRecordsById: (state) => (source, actionId) => {
+      const filteredRecords = state[source].filter(
+        (r) => r.actionId === actionId
+      )
+      const sortedRecords = filteredRecords.sort(
+        (a, b) => b.createdAt - a.createdAt
+      )
+
+      return sortedRecords
+    },
   },
 })

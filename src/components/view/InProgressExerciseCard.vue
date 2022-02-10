@@ -1,5 +1,6 @@
 <script>
 import InProgressExerciseSet from './InProgressExerciseSet.vue'
+import { SOURCE } from '../../constants/globals.js'
 
 export default {
   props: {
@@ -12,9 +13,6 @@ export default {
   data() {
     return {
       dialog: false,
-      notifications: false,
-      sound: true,
-      widgets: false,
     }
   },
 
@@ -36,6 +34,32 @@ export default {
         this.inProgressExercise?.actionId
       )
     },
+
+    previousExerciseRecords() {
+      return this.$store.getters.getAllPreviousRecordsById(
+        SOURCE.exerciseRecords,
+        this.exerciseId
+      )
+    },
+  },
+
+  methods: {
+    recordSetsToStr(setsData) {
+      let outputStr = ''
+
+      setsData.forEach((set) => {
+        if (set.weight && set.reps) {
+          const weight = set.weight.toString()
+          const reps = set.reps.toString()
+
+          outputStr += `${weight}x${reps}, `
+        }
+      })
+
+      outputStr = outputStr.slice(0, -2)
+
+      return outputStr
+    },
   },
 }
 </script>
@@ -48,7 +72,7 @@ export default {
         <v-btn icon absolute top right @click="viewRecords()">
           <v-icon>assignment</v-icon>
         </v-btn>
-        <!-- TEST DIALOG -->
+        <!-- DIALOG -->
         <v-row justify="center">
           <v-dialog
             v-model="dialog"
@@ -64,7 +88,7 @@ export default {
 
             <v-card>
               <v-toolbar dark color="primary">
-                <v-toolbar-title>Previous Records</v-toolbar-title>
+                <v-toolbar-title>{{ exerciseName }}</v-toolbar-title>
                 <v-spacer />
                 <v-toolbar-items>
                   <v-btn icon @click="dialog = false">
@@ -72,13 +96,31 @@ export default {
                   </v-btn>
                 </v-toolbar-items>
               </v-toolbar>
-              <div>
-                Hello World!
-              </div>
+              <!-- Dialog Table -->
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Date</th>
+                      <th class="text-left">Sets</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="record in previousExerciseRecords"
+                      :key="record.id"
+                    >
+                      <td>{{ record.date }}</td>
+                      <td>{{ recordSetsToStr(record.data.sets) }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+              <!-- Dialog Table -->
             </v-card>
           </v-dialog>
         </v-row>
-        <!-- TEST DIALOG -->
+        <!-- DIALOG -->
       </v-card-title>
 
       <v-card-text>

@@ -3,7 +3,7 @@ import { VIEW } from '../../constants/globals.js'
 
 export default {
   computed: {
-    activeWorkoutName() {
+    inProgressWorkoutName() {
       return this.$store.getters.getInProgressWorkoutName
     },
   },
@@ -20,7 +20,7 @@ export default {
 
 <template>
   <v-app-bar app color="secondary">
-    <v-toolbar-title>{{ activeWorkoutName }}</v-toolbar-title>
+    <v-toolbar-title>{{ inProgressWorkoutName }}</v-toolbar-title>
 
     <v-spacer />
 

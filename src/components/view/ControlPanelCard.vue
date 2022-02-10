@@ -1,12 +1,4 @@
 <script>
-import {
-  CreateOperation,
-  ClearOperation,
-  RemoveOperation,
-  UpdateOperation,
-} from '../../models/Operations.js'
-import { Workout } from '../../models/Entities.js'
-
 export default {
   methods: {
     defaultApp() {
@@ -25,56 +17,6 @@ export default {
 
     exportRecords() {
       confirm('Not Implemented')
-    },
-
-    createTest1() {
-      const operation = new CreateOperation({
-        onSource: 'workouts',
-        newEntities: [
-          new Workout({
-            id: '8d4e4291',
-            name: 'Test 1',
-            exerciseIds: [],
-          }),
-          new Workout({
-            id: '8d4e4291-b87b-4756-b4ed-7cdd153f413a',
-            name: 'Test 2',
-            exerciseIds: [],
-          }),
-        ],
-      })
-      this.$store.dispatch('operationResolver', operation)
-    },
-
-    updateTest1() {
-      this.$store.dispatch(
-        'operationResolver',
-        new UpdateOperation({
-          onSource: 'workouts',
-          theseEntities: [
-            new Workout({
-              id: '8d4e4291',
-              name: 'Test 1 (Updated)',
-              exerciseIds: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            }),
-          ],
-        })
-      )
-    },
-
-    removeTest1() {
-      const operation = new RemoveOperation({
-        onSource: 'workouts',
-        theseIds: ['8d4e4291', '8d4e4291-b87b-4756-b4ed-7cdd153f413a'],
-      })
-      this.$store.dispatch('operationResolver', operation)
-    },
-
-    clearTest1() {
-      const operation = new ClearOperation({
-        theseSources: 'workouts',
-      })
-      this.$store.dispatch('operationResolver', operation)
     },
   },
 }
@@ -100,22 +42,6 @@ export default {
 
           <v-btn small class="warning mr-3 mt-3" @click="exportRecords()">
             Export Records
-          </v-btn>
-
-          <v-btn small class="secondary mr-3 mt-3" @click="createTest1()">
-            Create Test 1
-          </v-btn>
-
-          <v-btn small class="secondary mr-3 mt-3" @click="updateTest1()">
-            Update Test 1
-          </v-btn>
-
-          <v-btn small class="secondary mr-3 mt-3" @click="removeTest1()">
-            Remove Test 1
-          </v-btn>
-
-          <v-btn small class="secondary mr-3 mt-3" @click="clearTest1()">
-            Clear Test 1
           </v-btn>
         </v-container>
       </v-card-actions>

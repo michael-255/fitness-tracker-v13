@@ -3,11 +3,11 @@ import { VIEW } from '../../constants/globals.js'
 
 export default {
   computed: {
-    activeWorkoutName() {
+    inProgressWorkoutName() {
       return this.$store.getters.getInProgressWorkoutName
     },
 
-    activeWorkoutDate() {
+    inProgressWorkoutDate() {
       return this.$store.getters.getInProgressWorkoutDate
     },
   },
@@ -29,12 +29,12 @@ export default {
 <template>
   <v-col class="col-12 col-sm-6 col-md-4 col-xl-3">
     <v-card>
-      <v-card-title>{{ activeWorkoutName }}</v-card-title>
+      <v-card-title>{{ inProgressWorkoutName }}</v-card-title>
 
       <v-card-subtitle class="pb-0">
         <div>
           <v-icon small class="mr-1">start</v-icon>
-          <span>{{ activeWorkoutDate }}</span>
+          <span>{{ inProgressWorkoutDate }}</span>
         </div>
         <div>
           <v-icon small class="mr-1">directions_run</v-icon>
