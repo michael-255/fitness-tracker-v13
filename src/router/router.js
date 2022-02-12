@@ -15,6 +15,12 @@ const routes = [
     component: () => import('../views/Dashboard.vue'),
   },
   {
+    path: '/measurements',
+    name: VIEW.measurements,
+    meta: { layout: LAYOUT.measurements },
+    component: () => import('../views/Measurements.vue'),
+  },
+  {
     path: '/in-progress-workout',
     name: VIEW.inProgressWorkout,
     meta: { layout: LAYOUT.inProgressWorkout },

@@ -65,6 +65,7 @@ const layout = 'Layout'
 export const LAYOUT = Object.freeze({
   default: 'Default' + layout,
   inProgressWorkout: 'inProgressWorkout' + layout,
+  measurements: 'measurements' + layout,
 })
 
 const view = 'View'
@@ -73,4 +74,5 @@ export const VIEW = Object.freeze({
   notFound: 'NotFound' + view,
   dashboard: 'Dashboard' + view,
   inProgressWorkout: 'inProgressWorkout' + view,
+  measurements: 'measurements' + view,
 })

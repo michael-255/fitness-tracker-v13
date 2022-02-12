@@ -1,4 +1,6 @@
 <script>
+import { VIEW } from '../../constants/globals.js'
+
 export default {
   methods: {
     defaultApp() {
@@ -17,6 +19,10 @@ export default {
 
     exportRecords() {
       confirm('Not Implemented')
+    },
+
+    measurements() {
+      this.$router.push({ name: VIEW.measurements })
     },
   },
 }
@@ -42,6 +48,10 @@ export default {
 
           <v-btn small class="warning mr-3 mt-3" @click="exportRecords()">
             Export Records
+          </v-btn>
+
+          <v-btn small class="primary mr-3 mt-3" @click="measurements()">
+            Measurements
           </v-btn>
         </v-container>
       </v-card-actions>

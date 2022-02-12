@@ -20,10 +20,11 @@ Vue.use(Vuex)
  * Use the ENTITY constant when accessing.
  */
 const defaultState = () => ({
+  isDrawerActive: false,
   [SOURCE.measurements]: [],
   [SOURCE.exercises]: [],
   [SOURCE.workouts]: [],
-  [SOURCE.measurementsInProgress]: [],
+  [SOURCE.measurementsInProgress]: [], // Not currently used
   [SOURCE.exercisesInProgress]: [],
   [SOURCE.workoutsInProgress]: [],
   [SOURCE.measurementRecords]: [],
@@ -44,6 +45,9 @@ export default new Vuex.Store({
       const { source, data } = payload
       state[source] = data
     },
+    SET_DRAWER(state, bool) {
+      state.isDrawerActive = !!bool
+    },
     CLEAR_STATE(state) {
       Object.assign(state, defaultState())
     },
@@ -54,6 +58,16 @@ export default new Vuex.Store({
    * Most of your important app functionality should be handled by actions.
    */
   actions: {
+    setDrawer({ commit, state }, drawerEvent) {
+      if (state.isDrawerActive !== !!drawerEvent) {
+        commit('SET_DRAWER', !!drawerEvent)
+      }
+    },
+
+    toggleDrawer({ commit, state }) {
+      commit('SET_DRAWER', !state.isDrawerActive)
+    },
+
     /**
      * Init local storage if needed, then retrieve any data for the app state.
      */
@@ -194,6 +208,16 @@ export default new Vuex.Store({
         new UpdateOperation({
           onSource: SOURCE.exercisesInProgress,
           theseEntities: updatedRecords,
+        })
+      )
+    },
+
+    saveMeasurement({ dispatch }, measurementRecord) {
+      dispatch(
+        'operationResolver',
+        new CreateOperation({
+          onSource: SOURCE.measurementRecords,
+          newEntities: measurementRecord,
         })
       )
     },
@@ -560,6 +584,21 @@ export default new Vuex.Store({
     },
 
     getAllPreviousRecordsById: (state) => (source, actionId) => {
+      const filteredRecords = state[source].filter(
+        (r) => r.actionId === actionId
+      )
+      const sortedRecords = filteredRecords.sort(
+        (a, b) => b.createdAt - a.createdAt
+      )
+
+      return sortedRecords
+    },
+
+    /**
+     * Returns sorted records for an action by id.
+     * (measurement, exercise, workout)
+     */
+    getSortedRecordsByActionId: (state) => (source, actionId) => {
       const filteredRecords = state[source].filter(
         (r) => r.actionId === actionId
       )

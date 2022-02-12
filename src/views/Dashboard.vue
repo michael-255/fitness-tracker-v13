@@ -24,6 +24,7 @@ export default {
         ],
       })
     )
+    this.$store.dispatch('setDrawer', false)
   },
 
   computed: {
