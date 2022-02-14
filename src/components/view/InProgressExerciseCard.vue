@@ -69,9 +69,6 @@ export default {
     <v-card>
       <v-card-title>
         <span>{{ exerciseName }}</span>
-        <v-btn icon absolute top right @click="viewRecords()">
-          <v-icon>assignment</v-icon>
-        </v-btn>
         <!-- DIALOG -->
         <v-row justify="center">
           <v-dialog
@@ -82,7 +79,7 @@ export default {
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon absolute top right v-bind="attrs" v-on="on">
-                <v-icon>assignment</v-icon>
+                <v-icon>timeline</v-icon>
               </v-btn>
             </template>
 

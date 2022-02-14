@@ -1,6 +1,17 @@
 <script>
+import DrawerListItem from './DrawerListItem.vue'
+import { DATA_VERSION, VIEW } from '../../constants/globals.js'
+
 export default {
-  components: {},
+  components: {
+    DrawerListItem,
+  },
+
+  data() {
+    return {
+      dataVersion: DATA_VERSION,
+    }
+  },
 
   computed: {
     navDrawer: {
@@ -12,42 +23,113 @@ export default {
       },
     },
   },
+
+  methods: {
+    closeDrawer() {
+      this.$store.dispatch('setDrawer', false)
+    },
+
+    measurements() {
+      this.$router.push({ name: VIEW.measurements })
+      this.closeDrawer()
+    },
+
+    charts() {
+      console.log('Not Implemented')
+      this.closeDrawer()
+    },
+
+    exportState() {
+      if (confirm('Not Implemented')) {
+        this.closeDrawer()
+      }
+    },
+
+    exportRecords() {
+      if (confirm('Not Implemented')) {
+        this.closeDrawer()
+      }
+    },
+
+    importData() {
+      if (confirm('Not Implemented')) {
+        this.closeDrawer()
+      }
+    },
+
+    loadDefaults() {
+      if (confirm('Load defaults for the app?')) {
+        this.$store.dispatch('setDefaultAppData')
+        this.closeDrawer()
+      }
+    },
+
+    clearApp() {
+      if (confirm('Clear all app data and records?')) {
+        this.$store.dispatch('clearAppData')
+        this.closeDrawer()
+      }
+    },
+  },
 }
 </script>
 
 <template>
-  <v-navigation-drawer v-model="navDrawer" app clipped>
+  <v-navigation-drawer v-model="navDrawer" app>
     <v-list nav>
-      <v-list-item link>
-        <v-list-item-action>
-          <v-icon>timeline</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          Item 1
-        </v-list-item-content>
-      </v-list-item>
+      <v-subheader class="mb-2 pt-2">MENU</v-subheader>
+
+      <v-btn icon absolute top right class="mb-2" @click="this.closeDrawer">
+        <v-icon>close</v-icon>
+      </v-btn>
 
       <v-divider class="mb-2" />
 
-      <v-list-item link>
-        <v-list-item-action>
-          <v-icon>sd_card</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          Item 2
-        </v-list-item-content>
-      </v-list-item>
+      <DrawerListItem
+        :func="this.measurements"
+        icon="straighten"
+        name="Measurements"
+      />
+
+      <DrawerListItem :func="this.charts" icon="timeline" name="Charts" />
 
       <v-divider class="mb-2" />
 
-      <v-list-item link>
-        <v-list-item-action>
-          <v-icon>announcement</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          Item 3
-        </v-list-item-content>
-      </v-list-item>
+      <DrawerListItem
+        :func="this.exportState"
+        icon="inventory_2"
+        name="Export State JSON"
+      />
+
+      <DrawerListItem
+        :func="this.exportRecords"
+        icon="text_snippet"
+        name="Export Record CSVs"
+      />
+
+      <DrawerListItem
+        :func="this.importData"
+        icon="system_update_alt"
+        name="Import Data"
+      />
+
+      <DrawerListItem
+        :func="this.loadDefaults"
+        icon="settings_backup_restore"
+        name="Load Defaults"
+      />
+
+      <v-divider class="mb-2" />
+
+      <DrawerListItem
+        :func="this.clearApp"
+        icon="delete"
+        name="Clear App Data"
+      />
+
+      <v-divider class="mb-2" />
     </v-list>
+
+    <div class="caption font-weight-thin ml-4">{{ dataVersion }}</div>
   </v-navigation-drawer>
 </template>

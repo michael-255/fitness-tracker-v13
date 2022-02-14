@@ -4,17 +4,12 @@ Fitness Tracker Web App v13
 
 ## Todo - Continue carefully refactoring the project
 
-- `Drawer` options:
-  - Load Defaults
-  - Clear App Data
-  - Export Records
-    - Export State JSON
-    - Export Measurements CSV
-    - Export Exercises CSV
-    - Export Workouts CSV
-  - Add a measurement record???
-  - Number of days since last workout of any kind???
-  - Display the current data version (`FTData-v#`)
-- Update data version...
-
-## WIP Notes
+- Implement `Export` features:
+  - Export State JSON
+  - Export Record CSVs
+- Implement `Import` feature:
+  - Imports state data from `vue-fitness-progression (v11)`
+- Implement `Charts` features:
+  - Will need to include a charting package for the app
+  - Add charts above record summaries
+  - Create charts screen with measurements, exercises, and workouts

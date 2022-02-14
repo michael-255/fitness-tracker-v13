@@ -23,10 +23,6 @@ export default {
 
 <template>
   <v-row>
-    <v-col class="text-center text-h6 col-12 py-0">
-      <v-banner single-line>Workouts</v-banner>
-    </v-col>
-
     <ResumeCard v-if="renderResumeCard" />
 
     <WorkoutCard

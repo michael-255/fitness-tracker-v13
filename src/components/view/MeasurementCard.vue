@@ -78,7 +78,7 @@ export default {
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon absolute top right v-bind="attrs" v-on="on">
-                <v-icon>assignment</v-icon>
+                <v-icon>timeline</v-icon>
               </v-btn>
             </template>
 

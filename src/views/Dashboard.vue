@@ -1,5 +1,4 @@
 <script>
-import RecommendationsContainer from '../components/view/RecommendationsContainer.vue'
 import WorkoutsContainer from '../components/view/WorkoutsContainer.vue'
 import { SOURCE, VIEW } from '../constants/globals.js'
 import { LoadOperation } from '../models/Operations.js'
@@ -8,7 +7,6 @@ export default {
   name: VIEW.dashboard,
 
   components: {
-    RecommendationsContainer,
     WorkoutsContainer,
   },
 
@@ -37,7 +35,18 @@ export default {
 
 <template>
   <v-container>
-    <RecommendationsContainer />
+    <v-row>
+      <v-col v-if="!this.renderWorkouts">
+        <v-card>
+          <v-card-title>Ready to begin?</v-card-title>
+
+          <v-card-subtitle>
+            Open the menu and load the defaults for the app, or import your own.
+          </v-card-subtitle>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <WorkoutsContainer v-if="renderWorkouts" />
   </v-container>
 </template>

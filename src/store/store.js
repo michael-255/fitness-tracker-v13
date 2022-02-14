@@ -494,14 +494,6 @@ export default new Vuex.Store({
       return getters.getEntityById(SOURCE.exercises, exerciseId)
     },
 
-    getExerciseNameById: (_, getters) => (exerciseId) => {
-      return getters.getEntityById(SOURCE.exercises, exerciseId)?.name
-    },
-
-    getExerciseInputsById: (_, getters) => (exerciseId) => {
-      return getters.getEntityById(SOURCE.exercises, exerciseId)?.inputs
-    },
-
     getExerciseSetCountById: (_, getters) => (exerciseId) => {
       return getters.getEntityById(SOURCE.exercises, exerciseId)?.inputs
         ?.setCount
@@ -511,10 +503,6 @@ export default new Vuex.Store({
 
     getWorkoutById: (state) => (workoutId) => {
       return state[SOURCE.workouts].find((w) => w.id === workoutId)
-    },
-
-    getWorkoutNameById: (_, getters) => (workoutId) => {
-      return getters.getEntityById(SOURCE.workouts, workoutId)?.name
     },
 
     // In Progress Workout
