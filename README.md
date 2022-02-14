@@ -5,8 +5,6 @@ Fitness Tracker Web App v13
 ## Todo - Continue carefully refactoring the project
 
 - Implement `Export` features:
-  - Export State JSON
-  - Export Record CSVs
   - Update old `vue-fitness-progression (v11)` to export state JSON
 - Implement `Import` feature:
   - Imports state data from `vue-fitness-progression (v11)`
@@ -19,4 +17,4 @@ Fitness Tracker Web App v13
 - App cleanup:
   - Cleanup `store.js` functions by moving some to the component level
   - Implement custom `Dialogs` to replace browser confirm boxes (Vuetify?)
-  - Increment the Fit Data Version one last time
+  - Increment Fit Data Version for `inProgressMeasurements` removal

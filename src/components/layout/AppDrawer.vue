@@ -1,6 +1,7 @@
 <script>
 import DrawerListItem from './DrawerListItem.vue'
 import { DATA_VERSION, VIEW } from '../../constants/globals.js'
+import { downloadFile, createId } from '../../utils/common.js'
 
 export default {
   components: {
@@ -42,13 +43,10 @@ export default {
     },
 
     exportState() {
-      if (confirm('Not Implemented')) {
-        this.closeDrawer()
-      }
-    },
-
-    exportRecords() {
-      if (confirm('Not Implemented')) {
+      if (confirm('Export app state as JSON?')) {
+        const fileName = `fitness-state-export-${createId()}.json`
+        const fileData = this.$store.getters.getStateJSON
+        downloadFile(fileName, fileData)
         this.closeDrawer()
       }
     },
@@ -81,10 +79,6 @@ export default {
     <v-list nav>
       <v-subheader class="mb-2 pt-2">MENU</v-subheader>
 
-      <v-btn icon absolute top right class="mb-2" @click="this.closeDrawer">
-        <v-icon>close</v-icon>
-      </v-btn>
-
       <v-divider class="mb-2" />
 
       <DrawerListItem
@@ -101,12 +95,6 @@ export default {
         :func="this.exportState"
         icon="inventory_2"
         name="Export State JSON"
-      />
-
-      <DrawerListItem
-        :func="this.exportRecords"
-        icon="text_snippet"
-        name="Export Record CSVs"
       />
 
       <DrawerListItem

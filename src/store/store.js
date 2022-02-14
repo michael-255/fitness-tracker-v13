@@ -484,6 +484,10 @@ export default new Vuex.Store({
       )
     },
 
+    getStateJSON: (state) => {
+      return JSON.stringify(state)
+    },
+
     getEntityById: (state) => (source, id) => {
       return state[source].find((e) => e.id === id)
     },

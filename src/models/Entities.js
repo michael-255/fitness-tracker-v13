@@ -1,8 +1,8 @@
-import { v4 as uuid } from 'uuid'
 import { ACTION_TYPE, RECORD_TYPE } from '../constants/globals.js'
+import { createId } from '../utils/common.js'
 
 class _Entity {
-  constructor({ id = uuid(), type = null } = {}) {
+  constructor({ id = createId(), type = null } = {}) {
     this.id = id
     this.type = type
   }
