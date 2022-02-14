@@ -41,7 +41,8 @@ export default {
           <v-card-title>Ready to begin?</v-card-title>
 
           <v-card-subtitle>
-            Open the menu and load the defaults for the app, or import your own.
+            Open the menu and load the defaults for the app, or import your
+            data.
           </v-card-subtitle>
         </v-card>
       </v-col>

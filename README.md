@@ -16,3 +16,7 @@ Fitness Tracker Web App v13
   - Will need to include a charting package for the app
   - Add charts above record summaries
   - Create charts screen with measurements, exercises, and workouts
+- App cleanup:
+  - Cleanup `store.js` functions by moving some to the component level
+  - Implement custom `Dialogs` to replace browser confirm boxes (Vuetify?)
+  - Increment the Fit Data Version one last time

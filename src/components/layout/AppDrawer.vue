@@ -35,8 +35,10 @@ export default {
     },
 
     charts() {
-      console.log('Not Implemented')
-      this.closeDrawer()
+      // Confirm dialog won't be needed for new CHARTS screen once implemented
+      if (confirm('Not Implemented')) {
+        this.closeDrawer()
+      }
     },
 
     exportState() {
