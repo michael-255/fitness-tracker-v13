@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       dataVersion: DATA_VERSION,
+      importedData: null,
     }
   },
 
@@ -52,9 +53,28 @@ export default {
     },
 
     importData() {
-      if (confirm('Not Implemented')) {
-        this.closeDrawer()
+      let fileSelector = document.createElement('input')
+      fileSelector.setAttribute('type', 'file')
+
+      fileSelector.onchange = () => {
+        const selectedFile = fileSelector.files[0]
+        console.log(selectedFile)
+
+        let reader = new FileReader()
+        reader.readAsText(selectedFile)
+
+        reader.onload = () => {
+          this.importedData = JSON.parse(reader.result)
+        }
+
+        reader.onerror = () => {
+          console.error(reader.error)
+        }
       }
+
+      fileSelector.click()
+
+      this.closeDrawer()
     },
 
     loadDefaults() {
@@ -100,7 +120,7 @@ export default {
       <DrawerListItem
         :func="this.importData"
         icon="system_update_alt"
-        name="Import Data"
+        name="Import v11 App Data"
       />
 
       <DrawerListItem
