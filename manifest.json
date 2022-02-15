@@ -1,6 +1,6 @@
 {
   "name": "Fitness Tracker",
-  "short_name": "Fit LP",
+  "short_name": "Fitness Tracker",
   "description": "Fitness Tracker helps you reach your fitness goals one step at a time.",
   "catagories": ["fitness", "health", "lifestyle", "sports"],
   "background_color": "#000000",
