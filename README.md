@@ -2,11 +2,8 @@
 
 Fitness Tracker Web App v13
 
-## Todo - Continue carefully refactoring the project
+## Todo
 
-- Implement `Import` feature:
-  - Will need to map over old records to the new record ids (by name?)
-  - Will require some data manipulation for the new records
 - Implement `Charts` features:
   - Will need to include a charting package for the app
   - Add charts above record summaries
