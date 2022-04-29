@@ -1,7 +1,7 @@
 <script>
 import DrawerListItem from './DrawerListItem.vue'
 import { DATA_VERSION, SOURCE, VIEW } from '../../constants/globals.js'
-import { downloadFile, createId } from '../../utils/common.js'
+import { downloadFile, createId, createFTv14Id } from '../../utils/common.js'
 import { CreateOperation } from '../../models/Operations.js'
 
 export default {
@@ -163,6 +163,205 @@ export default {
       this.closeDrawer()
     },
 
+    ftv14Export() {
+      if (confirm('Export app state as Fitness Tracker v14 JSON?')) {
+        const stateData = this.$store.getters.getAllStateData
+        const records = {
+          measurementRecords: stateData.measurementRecords,
+          exerciseRecords: stateData.exerciseRecords,
+          workoutRecords: stateData.workoutRecords,
+        }
+        const convertedRecords = {
+          measurementRecords: [],
+          exerciseRecords: [],
+          workoutRecords: [],
+        }
+
+        console.log(createFTv14Id())
+        console.log(records)
+
+        // Measurement Records
+        const convertedMeasurementRecords = records.measurementRecords.map(
+          (mr) => {
+            // Id lookup
+            let addObj = {}
+            switch (mr.actionName) {
+              case 'Body Weight':
+                addObj.parentId = '122G-ISH0-KQQC'
+                addObj.lbs = mr.value
+                break
+              case 'Body Fat':
+                addObj.parentId = 'BBV6-WJV0-BO7W'
+                addObj.lbs = mr.value
+                break
+              case 'Neck':
+                addObj.parentId = 'F8V7-U81S-RD58'
+                addObj.inches = mr.value
+                break
+              case 'Shoulders':
+                addObj.parentId = 'A0DU-AJ0X-LCYD'
+                addObj.inches = mr.value
+                break
+              case 'Chest':
+                addObj.parentId = 'QLV9-CXMV-9L87'
+                addObj.inches = mr.value
+                break
+              case 'Left Biceps':
+                addObj.parentId = 'VO6C-7X1V-BFZQ'
+                addObj.inches = mr.value
+                break
+              case 'Right Biceps':
+                addObj.parentId = 'VLR4-0HZ7-027O'
+                addObj.inches = mr.value
+                break
+              case 'Left Forearms':
+                addObj.parentId = 'YKDW-16OB-QM1O'
+                addObj.inches = mr.value
+                break
+              case 'Right Forearms':
+                addObj.parentId = 'R6UV-WRQZ-YA3A'
+                addObj.inches = mr.value
+                break
+              case 'Waist':
+                addObj.parentId = '2B4M-573D-LLWN'
+                addObj.inches = mr.value
+                break
+              case 'Left Thighs':
+                addObj.parentId = 'C48H-L6LV-FTCZ'
+                addObj.inches = mr.value
+                break
+              case 'Right Thighs':
+                addObj.parentId = '7BK9-30DF-MD08'
+                addObj.inches = mr.value
+                break
+              case 'Left Calves':
+                addObj.parentId = '6CJL-D836-1J0K'
+                addObj.inches = mr.value
+                break
+              case 'Right Calves':
+                addObj.parentId = 'S5CG-WH2J-7MIK'
+                addObj.inches = mr.value
+                break
+              case 'Height':
+                addObj.parentId = 'VEHP-0EYL-IW3G'
+                addObj.inches = mr.value
+                break
+              default:
+                addObj = null
+                break
+            }
+
+            return {
+              id: createFTv14Id(),
+              createdAt: new Date(mr.createdAt).toISOString(),
+              parentId: addObj.parentId || undefined,
+              note: undefined,
+              lbs: addObj.lbs || undefined,
+              inches: addObj.inches || undefined,
+            }
+          }
+        )
+
+        convertedRecords.measurementRecords = convertedMeasurementRecords
+
+        // Exercise records
+        const convertedExerciseRecords = records.exerciseRecords.map((er) => {
+          // Id lookup
+          let addObj = {}
+          switch (er.actionName) {
+            case 'Barbell Squats':
+              addObj.parentId = 'LI6N-BS98-26RX'
+              break
+            case 'Barbell Bench Press':
+              addObj.parentId = 'SXL4-79XA-Y5GF'
+              break
+            case 'Barbell Rows':
+              addObj.parentId = 'HBPR-WGQ0-NEHJ'
+              break
+            case 'Barbell Overhead Press':
+              addObj.parentId = 'VXZU-4CAZ-FB9U'
+              break
+            case 'Deadlift':
+              addObj.parentId = 'KEM9-NNUN-L3UH'
+              break
+            default:
+              addObj = null
+              break
+          }
+
+          return {
+            id: createFTv14Id(),
+            createdAt: new Date(er.createdAt).toISOString(),
+            parentId: addObj.parentId,
+            note: undefined,
+            skipped: undefined,
+            sets: er.data.sets.map((s) => ({ reps: s.reps, weight: s.weight })),
+          }
+        })
+
+        convertedRecords.exerciseRecords = convertedExerciseRecords
+
+        /**
+         * WorkoutRecord Class
+         * @param {string} obj.id (Inherited, Optional)
+         * @param {string} obj.createdAt (Inherited, Optional)
+         * @param {string} obj.parentId (Inherited, Required)
+         * @param {string} obj.note (Inherited, Optional)
+         * @param {string} obj.finishedAt (Optional)
+         * @param {string[]} obj.exerciseRecordIds (Defaulted)
+         */
+        // Workout records
+        const convertedWorkoutRecords = records.workoutRecords.map((wr) => {
+          // Id lookup
+          let addObj = {}
+          switch (wr.actionName) {
+            case 'StrongLifts 5x5 - Alpha':
+              addObj.parentId = '155T-A7DX-DDTZ'
+              break
+            case 'StrongLifts 5x5 - Beta':
+              addObj.parentId = '87R2-WNY8-J9LM'
+              break
+            default:
+              addObj = null
+              break
+          }
+
+          // Find related exercise records
+          const workoutDate = wr.createdAt
+          const workoutDateMax = workoutDate + 2000
+          const workoutDateMin = workoutDate - 2000
+          let relatedExerciseRecords = []
+          convertedRecords.exerciseRecords.forEach((r) => {
+            const exerciseDate = new Date(r.createdAt).getTime()
+            if (
+              exerciseDate >= workoutDateMin &&
+              exerciseDate <= workoutDateMax
+            ) {
+              relatedExerciseRecords.push(r.id)
+            }
+          })
+
+          return {
+            id: createFTv14Id(),
+            createdAt: new Date(wr.createdAt).toISOString(),
+            parentId: addObj.parentId,
+            note: undefined,
+            finishedAt: new Date(wr.endedAt).toISOString(),
+            exerciseRecordIds: relatedExerciseRecords,
+          }
+        })
+
+        convertedRecords.workoutRecords = convertedWorkoutRecords
+
+        console.log(convertedRecords)
+
+        const fileData = JSON.stringify(convertedRecords)
+        const fileName = `fitness-tracket-v14-export-${createId()}.json`
+        downloadFile(fileName, fileData)
+        this.closeDrawer()
+      }
+    },
+
     loadDefaults() {
       if (confirm('Load defaults for the app?')) {
         this.$store.dispatch('setDefaultAppData')
@@ -201,6 +400,12 @@ export default {
         :func="this.exportState"
         icon="inventory_2"
         name="Export State JSON"
+      />
+
+      <DrawerListItem
+        :func="this.ftv14Export"
+        icon="inventory_2"
+        name="Export FT v14 JSON"
       />
 
       <DrawerListItem

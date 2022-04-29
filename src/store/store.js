@@ -473,6 +473,8 @@ export default new Vuex.Store({
    * Use computed properties on the component for one off values.
    */
   getters: {
+    getAllStateData: (state) => state,
+
     getState: (state) => (source) => state[source],
 
     isStateReady: (state) => (source) => isArrayReady(state[source]),

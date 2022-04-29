@@ -40,6 +40,20 @@ export function createId() {
   return id
 }
 
+export function createFTv14Id() {
+  const part1 = Math.random()
+    .toString(36)
+    .substring(2, 6)
+  const part2 = Math.random()
+    .toString(36)
+    .substring(2, 6)
+  const part3 = Math.random()
+    .toString(36)
+    .substring(2, 6)
+  const id = `${part1}-${part2}-${part3}`.toUpperCase()
+  return id
+}
+
 export function downloadFile(filename, textInput) {
   let tempElement = document.createElement('a')
   tempElement.setAttribute(
